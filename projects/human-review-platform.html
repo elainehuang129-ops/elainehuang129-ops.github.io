@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>人审信息平台加速 | Yilin</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=20260527d">
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    <nav class="site-nav" id="site-nav" aria-label="项目导航">
+      <a href="../index.html#projects">全部作品</a>
+      <a class="nav-contact" href="../index.html#contact">联系</a>
+    </nav>
+  </header>
+  <main class="case-main">
+    <a class="back-link" href="../index.html#projects">← 返回作品列表</a>
+    <header class="case-hero">
+      <p class="eyebrow">PRODUCTIVITY / AI TOOLS / CASE 03</p>
+      <h1>人审信息平台加速</h1>
+      <p class="case-summary">利用 Codex 联网搜索能力辅助构建项目类型分类系统，将原本依赖人工检索的分类前处理过程自动化，加快人工审核效率。</p>
+      <dl class="case-facts">
+        <div><dt>角色</dt><dd>方案设计 / Prompt 撰写</dd></div>
+        <div><dt>工具</dt><dd>Codex · 联网搜索 · 结构化提示词</dd></div>
+        <div><dt>状态</dt><dd>脱敏交互演示已补充</dd></div>
+      </dl>
+      <div class="case-actions-inline">
+        <a class="button primary" href="#evidence">体验脱敏审核台</a>
+        <a class="button secondary" href="#extension">查看产品化方向</a>
+      </div>
+    </header>
+    <div class="case-body">
+      <nav class="case-nav" aria-label="页内导航">
+        <a href="#challenge">背景</a>
+        <a href="#solution">方案</a>
+        <a href="#evidence">演示</a>
+        <a href="#outcome">成果</a>
+        <a href="#learning">沉淀</a>
+        <a href="#extension">延伸</a>
+      </nav>
+      <article class="case-content">
+        <section id="challenge">
+          <h2>业务背景</h2>
+          <p>人工审核工作中，审核员在对项目进行分类时需要大量检索背景信息，效率较低，且一致性依赖个人经验。</p>
+        </section>
+        <section id="solution">
+          <h2>我的方案</h2>
+          <p>我使用 Codex 联网搜索功能，为每个待审核项目自动搜集相关背景资料，并通过结构化提示词输出分类建议与置信度评分，低置信度项目自动标记为需人工复核。</p>
+          <div class="case-flow"><span>输入项目信息</span><span>Codex 联网搜索</span><span>AI 分类建议</span><span>置信度评估</span><span>人工复核标记</span></div>
+        </section>
+        <section id="evidence">
+          <h2>脱敏演示：预审工作台</h2>
+          <p>由于生产界面及真实审核数据不适合公开，下方用脱敏样本演示审核员实际会看到的预处理结果和分流动作。点击状态按钮可查看不同处理队列。</p>
+          <div class="proof-panel">
+            <div class="proof-header">
+              <div><h3>项目预审队列 / 示例批次</h3><p>依据检索结论、置信度和风险标记进行人工分流</p></div>
+              <span class="proof-badge sample">非生产截图</span>
+            </div>
+            <div class="review-demo" id="reviewDemo">
+              <div class="review-toolbar">
+                <strong>待处理项目 3 项</strong>
+                <div class="review-filters" aria-label="审核队列筛选">
+                  <button type="button" class="review-filter active" data-review-filter="all">全部 3</button>
+                  <button type="button" class="review-filter" data-review-filter="review">需复核 2</button>
+                  <button type="button" class="review-filter" data-review-filter="pass">可确认 1</button>
+                </div>
+              </div>
+              <div class="review-row" data-review-state="review">
+                <div><small>项目名称</small><strong>利妥昔单抗注射液</strong></div>
+                <div><small>AI 建议</small><span>药品 / 恶性肿瘤</span></div>
+                <div><small>置信度</small><span>0.72</span></div>
+                <div><small>动作</small><span class="status-pill review">医学复核</span></div>
+              </div>
+              <div class="review-row" data-review-state="pass">
+                <div><small>项目名称</small><strong>二甲双胍片</strong></div>
+                <div><small>AI 建议</small><span>药品 / 糖尿病</span></div>
+                <div><small>置信度</small><span>0.94</span></div>
+                <div><small>动作</small><span class="status-pill">候选确认</span></div>
+              </div>
+              <div class="review-row" data-review-state="review">
+                <div><small>项目名称</small><strong>主任医师</strong></div>
+                <div><small>AI 建议</small><span>无意义字段</span></div>
+                <div><small>置信度</small><span>-</span></div>
+                <div><small>动作</small><span class="status-pill reject">建议剔除</span></div>
+              </div>
+            </div>
+            <div class="artifact-strip" aria-label="审核记录展示字段">
+              <div><small>证据入口</small><strong>来源链接与摘录留痕</strong></div>
+              <div><small>人工动作</small><strong>确认 / 退回 / 升级医学复核</strong></div>
+              <div><small>回流结果</small><strong>纠正标签进入下一版规则</strong></div>
+            </div>
+          </div>
+          <p class="note">演示样本来自公开展示用 Demo 数据，不包含客户资料；此处用于说明产品交互和人工把关路径，不代表生产系统页面。</p>
+        </section>
+        <section id="outcome">
+          <h2>成果</h2>
+          <p>交付重点不是替代审核员，而是让待处理事项带着“检索依据、建议类型、风险提示和下一步动作”进入人工队列，减少重复查询。</p>
+          <p class="note">可公开验证内容：脱敏演示队列可按复核状态筛选；对应 Demo 报告中的人工复核率为 60%、高风险/需复核召回率为 91%。指标仅用于验证演示流程。</p>
+        </section>
+        <section id="learning">
+          <h2>价值与沉淀</h2>
+          <p>AI 在人审场景中最有价值的定位是「预处理+低风险决策」，而非「全量替代」。通过置信度分级，既提高了效率，又保证了高风险情况下的人工把关。</p>
+        </section>
+        <section id="extension">
+          <h2>还可以延伸到什么</h2>
+          <div class="extension-grid">
+            <article class="extension-card"><h3>证据引用面板</h3><p>为每条建议保留公开来源、摘录和核验日期，让审核结论可回查。</p></article>
+            <article class="extension-card"><h3>双人复核机制</h3><p>高风险条目进入二次确认与冲突处理队列，形成审核闭环。</p></article>
+            <article class="extension-card"><h3>反馈驱动优化</h3><p>沉淀退回原因与纠正标签，用于校准检索提示词和分流阈值。</p></article>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Yilin.</span>
+    <a href="../index.html">返回首页</a>
+  </footer>
+  <script>
+    document.querySelectorAll('[data-review-filter]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var filter = button.getAttribute('data-review-filter');
+        document.querySelectorAll('[data-review-filter]').forEach(function (item) {
+          item.classList.toggle('active', item === button);
+        });
+        document.querySelectorAll('[data-review-state]').forEach(function (row) {
+          row.hidden = filter !== 'all' && row.getAttribute('data-review-state') !== filter;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
