@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>药品知识库构建 | Yilin</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=20260527d">
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    <nav class="site-nav" id="site-nav" aria-label="项目导航">
+      <a href="../index.html#projects">全部作品</a>
+      <a class="nav-contact" href="../index.html#contact">联系</a>
+    </nav>
+  </header>
+  <main class="case-main">
+    <a class="back-link" href="../index.html#projects">← 返回作品列表</a>
+    <header class="case-hero">
+      <p class="eyebrow">PRODUCTIVITY / KNOWLEDGE / CASE 04</p>
+      <h1>药品知识库构建</h1>
+      <p class="case-summary">通过 Codex 联网搜索批量收集药品说明书关键字段，结构化提取后导入知识库系统，助力构建药品规则底座。</p>
+      <dl class="case-facts">
+        <div><dt>角色</dt><dd>方案设计 / 提示词撰写 / 数据校验</dd></div>
+        <div><dt>工具</dt><dd>Codex · 联网搜索 · JSON 结构化输出</dd></div>
+        <div><dt>状态</dt><dd>采集与验证流程已设计</dd></div>
+      </dl>
+      <div class="case-actions-inline">
+        <a class="button primary" href="#evidence">查看验证流程</a>
+        <a class="button secondary" href="#extension">查看延伸方向</a>
+      </div>
+    </header>
+    <div class="case-body">
+      <nav class="case-nav" aria-label="页内导航">
+        <a href="#challenge">背景</a>
+        <a href="#solution">方案</a>
+        <a href="#evidence">验证</a>
+        <a href="#outcome">成果</a>
+        <a href="#learning">沉淀</a>
+        <a href="#extension">延伸</a>
+      </nav>
+      <article class="case-content">
+        <section id="challenge">
+          <h2>业务背景</h2>
+          <p>药品知识库建设需要对大量药品说明书进行逐一整理，传统方式依赖人工录入，效率低、周期长，且字段格式难以统一。</p>
+        </section>
+        <section id="solution">
+          <h2>我的方案</h2>
+          <p>我设计了一套批量处理流程：通过结构化提示词检索指定药品的中国批准适应症，优先记录官方说明书或可审计官方来源，并要求固定输出适应症原文、来源、核验日期与是否可直接推断疾病的结论。</p>
+          <div class="case-flow"><span>标准化药品名</span><span>官方来源检索</span><span>适应症原文提取</span><span>唯一性判断</span><span>人工复核入库</span></div>
+        </section>
+        <section id="evidence">
+          <h2>验证流程：从适应症到可用规则</h2>
+          <p>药品名称不能天然等同于单一疾病。公开展示版采用严格规则：仅当中国批准适应症的官方证据明确、方向唯一且词项足够精确时，才允许进入可直接推断的规则库。</p>
+          <div class="validation-steps">
+            <article class="validation-step"><span>01 / CAPTURE</span><h3>收集证据</h3><p>保存通用名、原始适应症文本、官方来源标题/链接与核验日期。</p></article>
+            <article class="validation-step"><span>02 / AUDIT</span><h3>判断唯一性</h3><p>多适应症、预防/支持/诊断性用途或证据不足的药品不直接映射疾病。</p></article>
+            <article class="validation-step"><span>03 / REVIEW</span><h3>审核入库</h3><p>通过项进入规则库；存疑项保留证据并送入医学人工复核队列。</p></article>
+          </div>
+          <div class="proof-panel">
+            <div class="proof-header">
+              <div><h3>证据搜集路径 / 可审计输入</h3><p>同一候选药品优先采用可复核的中国批准适应症来源</p></div>
+              <span class="proof-badge">验证口径</span>
+            </div>
+            <div class="source-ladder">
+              <article><strong>01 官方说明书</strong><p>优先保留说明书或官方医学信息页中的适应症文本。</p></article>
+              <article><strong>02 官方监管来源</strong><p>使用监管发布页或公开附件补充批准与变更信息。</p></article>
+              <article><strong>03 结论留痕</strong><p>记录来源标题、链接、核验日期及直推/送审结论。</p></article>
+            </div>
+            <div class="audit-fields">
+              <article><strong>入库必要字段</strong><p>规则词项、词项类型、完整适应症、推断疾病、置信结论。</p></article>
+              <article><strong>审计必要字段</strong><p>判定原因、官方证据链接、审核日期、版本与复核状态。</p></article>
+            </div>
+          </div>
+          <div class="proof-panel">
+            <div class="proof-header">
+              <div><h3>适应症核验记录 / 展示样例</h3><p>用于呈现验证字段和保守判定逻辑</p></div>
+              <span class="proof-badge sample">规则策略演示</span>
+            </div>
+            <table class="evidence-table">
+              <thead><tr><th>候选药品</th><th>需采集证据</th><th>风险识别</th><th>规则结论</th></tr></thead>
+              <tbody>
+                <tr><td>利妥昔单抗注射液</td><td>中国批准适应症原文及官方来源</td><td>演示数据提示可能多适应症</td><td><span class="status-pill review">不得直推，医学复核</span></td></tr>
+                <tr><td>二甲双胍片</td><td>说明书适应症、来源与审核日期</td><td>候选方向待官方证据确认</td><td><span class="status-pill review">证据确认后入库</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">验证口径：面向生产规则时，应以审计日期当日可追溯的中国批准适应症官方证据为准；本页样例用于展示流程，不替代医学审核。</p>
+        </section>
+        <section id="outcome">
+          <h2>成果</h2>
+          <p>沉淀了一套“采集字段 + 官方证据 + 唯一性判断 + 人工审核”的数据加工口径，能够将批量搜集从文本搬运升级为可审计的规则准备流程。</p>
+          <p class="note">当前公开页面展示的是验证设计与脱敏样例；授权后的原始说明书证据与正式入库记录应保留在受控环境中。</p>
+        </section>
+        <section id="learning">
+          <h2>价值与沉淀</h2>
+          <p>在知识库建设场景中，提示词的来源优先级和“拒绝入库”的规则同样重要：权威来源优先能降低错误，严格排除多适应症和证据不足条目则能降低误推断风险。</p>
+        </section>
+        <section id="extension">
+          <h2>还可以延伸到什么</h2>
+          <div class="extension-grid">
+            <article class="extension-card"><h3>药品规则审计库</h3><p>形成带证据链接、审核日期和版本记录的可部署规则清单。</p></article>
+            <article class="extension-card"><h3>适应症变更预警</h3><p>定期检查新增或扩展适应症，将失效的直推规则自动送审。</p></article>
+            <article class="extension-card"><h3>审核 API 服务</h3><p>向人审平台提供“可推断/需复核/禁止推断”的标准化判断结果。</p></article>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Yilin.</span>
+    <a href="../index.html">返回首页</a>
+  </footer>
+</body>
+</html>
