@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 日报自动化系统案例：Codex 定时任务 → 网站同步 + Gmail 推送">
+  <title>AI 日报自动化系统 | Yilin</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=20260527b">
+  <script src="../assets/site.js" defer></script>
+  <style>
+    /* Pipeline visual for case page */
+    .case-pipeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 22px 0;
+      overflow-x: auto;
+    }
+
+    .cp-step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      flex-shrink: 0;
+      min-width: 120px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .cp-step.dark {
+      background: #143f35;
+      border-color: #143f35;
+      color: #f8f4ec;
+    }
+
+    .cp-step-time {
+      color: #2db787;
+      display: block;
+      font-size: 10px;
+      letter-spacing: .07em;
+      margin-bottom: 5px;
+    }
+
+    .cp-step-label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .cp-step-sub {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .dark .cp-step-sub { color: #b8ccc3; }
+
+    .cp-arrow {
+      align-items: center;
+      color: var(--amber);
+      display: flex;
+      flex-shrink: 0;
+      font-size: 16px;
+      padding: 0 8px;
+    }
+
+    .output-row {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .cp-output {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 12px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+
+    .case-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .case-actions .button {
+      height: 48px;
+      padding: 0 19px;
+    }
+
+    .case-preview {
+      align-items: start;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      display: grid;
+      gap: 30px;
+      grid-template-columns: minmax(215px, 0.42fr) minmax(360px, 0.58fr);
+      margin-bottom: 52px;
+      padding: 30px;
+    }
+
+    .case-preview-copy h2 {
+      font-family: Georgia, "Noto Serif SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin: 0 0 15px;
+    }
+
+    .case-preview-copy p {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 18px;
+    }
+
+    .case-preview-copy .eyebrow {
+      color: var(--green);
+    }
+
+    .case-preview-copy a {
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .live-figure {
+      margin: 0;
+    }
+
+    .live-figure a {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: block;
+      overflow: hidden;
+    }
+
+    .live-figure img {
+      display: block;
+      height: auto;
+      max-height: none;
+      width: 100%;
+    }
+
+    .live-figure figcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 760px) {
+      .case-preview {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    <nav class="site-nav" id="site-nav" aria-label="项目导航">
+      <a href="../index.html#projects">全部作品</a>
+      <a class="nav-contact" href="../index.html#contact">联系</a>
+    </nav>
+  </header>
+
+  <main class="case-main">
+    <a class="back-link" href="../index.html#projects">← 返回作品列表</a>
+
+    <header class="case-hero">
+      <p class="eyebrow">AUTOMATION / CASE 01</p>
+      <h1>AI 日报自动化系统</h1>
+      <p class="case-summary">基于 Codex 定时任务，每天 9:00 自动完成 AI 资讯搜集与结构化整理，调用网站 webhook 发布日报，并将同步结果随日报发送至 Gmail。</p>
+      <div class="case-actions">
+        <a class="button primary" href="https://report-weaver-daily.lovable.app/" target="_blank" rel="noopener noreferrer">访问真实日报网站 ↗</a>
+        <a class="button secondary" href="#pipeline">查看自动化链路</a>
+      </div>
+      <dl class="case-facts">
+        <div><dt>角色</dt><dd>全流程设计 / 提示词撰写</dd></div>
+        <div><dt>工具</dt><dd>Codex · Website Webhook · Gmail</dd></div>
+        <div><dt>状态</dt><dd>自动任务已启用，每日运行</dd></div>
+      </dl>
+    </header>
+
+    <section class="case-preview" id="live-demo">
+      <div class="case-preview-copy">
+        <p class="eyebrow">LIVE PRODUCT</p>
+        <h2>从自动生成，到真实可浏览的日报产品</h2>
+        <p>日报内容不仅通过邮件送达，也沉淀到独立网站中，提供最新一期阅读、历史归档与关键词检索入口。</p>
+        <a href="https://report-weaver-daily.lovable.app/" target="_blank" rel="noopener noreferrer">打开线上产品体验 →</a>
+      </div>
+      <figure class="live-figure">
+        <a href="https://report-weaver-daily.lovable.app/" target="_blank" rel="noopener noreferrer" aria-label="打开知识日报线上网站">
+          <img src="../assets/images/ai-daily-report-home.png" alt="知识日报公开网站首页截图，展示最新一期 AI 日报阅读入口" loading="lazy">
+        </a>
+        <figcaption>真实站点截屏，获取于 2026 年 5 月 27 日；画面展示当时公开首页中的最新日报入口。</figcaption>
+      </figure>
+    </section>
+
+    <div class="case-body">
+      <nav class="case-nav" aria-label="页内导航">
+        <a href="#live-demo">产品实景</a>
+        <a href="#challenge">背景</a>
+        <a href="#pipeline">工具链</a>
+        <a href="#prompt">提示词</a>
+        <a href="#outcome">成果</a>
+        <a href="#learning">沉淀</a>
+      </nav>
+
+      <article class="case-content">
+
+        <section id="challenge">
+          <h2>背景与问题</h2>
+          <p>AI 领域每天都有大量值得关注的动态——模型更新、应用案例、政策动向——但手动收集和整理非常耗时，且容易遗漏。我希望有一套系统，能在我起床前就把当天的 AI 资讯整理好，推送到邮箱，同时可以在网站上存档查阅。</p>
+        </section>
+
+        <section id="pipeline">
+          <h2>自动化工具链</h2>
+          <p>整条流水线由 Codex 的定时任务功能触发，每天 9:00 自动执行。以下是当前配置的执行链路：</p>
+
+          <div class="case-pipeline">
+            <div class="cp-step dark">
+              <span class="cp-step-time">⏰ 09:00</span>
+              <div class="cp-step-label">Codex 定时任务</div>
+              <div class="cp-step-sub">自动触发，无人工操作</div>
+            </div>
+            <div class="cp-arrow">→</div>
+            <div class="cp-step">
+              <div class="cp-step-label">联网搜索</div>
+              <div class="cp-step-sub">收集当日 AI 动态</div>
+            </div>
+            <div class="cp-arrow">→</div>
+            <div class="cp-step">
+              <div class="cp-step-label">AI 整理生成</div>
+              <div class="cp-step-sub">结构化日报内容</div>
+            </div>
+            <div class="cp-arrow">→</div>
+            <div class="output-row">
+              <div class="cp-output">📧 Gmail 推送</div>
+              <div class="cp-output">🌐 网站发布</div>
+            </div>
+            <div class="cp-arrow">→</div>
+            <div class="cp-step dark">
+              <div class="cp-step-label">同步结果</div>
+              <div class="cp-step-sub">记录访问链接</div>
+            </div>
+          </div>
+
+          <ul>
+            <li><strong>Codex 定时任务</strong>：配置每日触发时间和执行逻辑，是整条链路的起点。</li>
+            <li><strong>联网搜索</strong>：由提示词指引 Codex 自动搜索当日 AI 领域关键动态。</li>
+            <li><strong>结构化生成</strong>：AI 将搜索结果整理为固定格式的日报内容（Markdown）。</li>
+            <li><strong>网站同步</strong>：将结构化日报 payload 发送至网站 webhook，成功时记录访问链接。</li>
+            <li><strong>邮件送达</strong>：将日报和网站同步结果发送至 Gmail 邮箱，便于及时查阅。</li>
+          </ul>
+        </section>
+
+        <section id="prompt">
+          <h2>提示词设计</h2>
+          <p>自动化流程的核心是提示词——它决定了 AI 搜索什么、如何整理、以什么格式输出。以下是日报收集提示词的结构示例（已脱敏）：</p>
+          <div class="case-flow">
+            <span>角色设定</span>
+            <span>搜索指令</span>
+            <span>筛选标准</span>
+            <span>格式约束</span>
+            <span>Markdown 输出</span>
+          </div>
+          <p style="margin-top:16px;">关键设计决策：</p>
+          <ul>
+            <li>明确指定日期变量 <code>{date}</code>，避免搜索到过期内容。</li>
+            <li>设置重要程度排序规则，让最有价值的资讯排在前面。</li>
+            <li>强制要求来源与日期标注，保证内容可追溯。</li>
+            <li>要求输出结构化 payload，便于网站同步发布和结果追踪。</li>
+          </ul>
+          <p class="note">提示词完整内容存储在 Codex 自动化配置中，此处展示结构示例，不公开完整指令。</p>
+        </section>
+
+        <section id="outcome">
+          <h2>成果</h2>
+          <ul>
+            <li>每天 9:00 自动执行资讯收集、整理和发布流程。</li>
+            <li>日报通过 Gmail 推送至邮箱，方便随时查阅。</li>
+            <li>网站同步成功时返回访问链接，并随邮件一并记录。</li>
+          </ul>
+          <p class="note">注：本页面依据当前自动化任务配置描述流程；公开访问地址以实际同步返回结果为准。</p>
+        </section>
+
+        <section id="learning">
+          <h2>价值与沉淀</h2>
+          <p>这个项目让我系统地实践了"让 AI 替我完成重复性信息工作"的思路。相比 n8n 工作流版本，Codex 自动化方案更轻量、配置更简单，完全满足个人日报场景的需求。</p>
+          <p>核心收获：提示词设计对结果质量有决定性影响；网站发布与邮件送达组合让内容更易查阅；定时自动化显著减少了手动收集时间。</p>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Yilin.</span>
+    <a href="../index.html">返回首页</a>
+  </footer>
+</body>
+</html>
