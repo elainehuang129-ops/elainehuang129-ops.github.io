@@ -1,0 +1,965 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="交互式互联网指标 SQL 练习器 — 在浏览器中直接运行真实 SQL 查询">
+  <title>SQL 指标练习器 | Yilin</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=20260527d">
+  <script src="../assets/site.js" defer></script>
+  <style>
+    /* ===== Demo Section ===== */
+    .demo-section {
+      border-top: 1px solid var(--line);
+      margin-top: 56px;
+      padding-top: 52px;
+    }
+
+    .demo-section > h2 {
+      font-family: Georgia, "Noto Serif SC", serif;
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .demo-section > p {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 36px;
+    }
+
+    .demo-layout {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 260px 1fr;
+    }
+
+    /* Exercises sidebar */
+    .exercises-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .exercises-panel h3 {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.18em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .ex-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .ex-item:hover, .ex-item.active {
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(18,84,67,.1);
+    }
+
+    .ex-item.active { background: #f4faf6; }
+
+    .ex-num {
+      color: var(--amber);
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+
+    .ex-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .ex-desc {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* Main demo area */
+    .demo-main { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Schema tabs */
+    .schema-area {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .schema-tabs {
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 0;
+    }
+
+    .schema-tab {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      cursor: pointer;
+      font: 13px inherit;
+      padding: 10px 18px;
+      transition: background .15s, color .15s;
+    }
+
+    .schema-tab:hover { background: #f0ece2; }
+
+    .schema-tab.active {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .schema-body { display: none; padding: 16px 18px; }
+    .schema-body.active { display: block; }
+
+    .schema-table {
+      border-collapse: collapse;
+      font-size: 12.5px;
+      width: 100%;
+    }
+
+    .schema-table th {
+      background: #f0ece2;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .08em;
+      padding: 6px 10px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    .schema-table td {
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+
+    .schema-table tr:nth-child(even) td { background: #faf8f3; }
+
+    .col-type {
+      color: var(--blue) !important;
+      font-family: ui-monospace, Consolas, monospace !important;
+    }
+
+    /* SQL Editor */
+    .editor-area {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .editor-toolbar {
+      align-items: center;
+      background: #f0ece2;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      padding: 10px 14px;
+    }
+
+    .editor-label {
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: bold;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .btn-run {
+      align-items: center;
+      background: var(--green);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      font: 13px inherit;
+      font-weight: 600;
+      gap: 5px;
+      padding: 7px 18px;
+      transition: filter .15s;
+    }
+
+    .btn-run:hover { filter: brightness(1.12); }
+
+    .btn-run:disabled {
+      cursor: not-allowed;
+      filter: grayscale(.6);
+      opacity: .7;
+    }
+
+    #sqlEditor {
+      background: #1e2a20;
+      border: none;
+      box-sizing: border-box;
+      caret-color: #e6c28b;
+      color: #e0f0e0;
+      font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+      font-size: 13.5px;
+      line-height: 1.7;
+      min-height: 140px;
+      outline: none;
+      padding: 16px 18px;
+      resize: vertical;
+      width: 100%;
+    }
+
+    /* Results */
+    .result-area {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 120px;
+      overflow: hidden;
+    }
+
+    .result-header {
+      align-items: center;
+      background: #f0ece2;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 10px;
+      padding: 9px 14px;
+    }
+
+    .result-header span {
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: bold;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .result-badge {
+      background: var(--green);
+      border-radius: 20px;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 9px;
+    }
+
+    .result-badge.error { background: #c0392b; }
+
+    #resultBody {
+      max-height: 380px;
+      overflow: auto;
+      padding: 0;
+    }
+
+    .result-placeholder {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 24px 18px;
+    }
+
+    .result-data-table {
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 100%;
+    }
+
+    .result-data-table th {
+      background: #f4f1e8;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      color: var(--ink);
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      padding: 8px 14px;
+      position: sticky;
+      text-align: left;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    .result-data-table td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 12.5px;
+      padding: 7px 14px;
+      white-space: nowrap;
+    }
+
+    .result-data-table tr:nth-child(even) td { background: #faf8f3; }
+
+    .result-error {
+      background: #fff5f5;
+      border-left: 3px solid #c0392b;
+      color: #7b1919;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 14px;
+      padding: 14px 16px;
+    }
+
+    .hint-box {
+      background: #fef9f0;
+      border-left: 3px solid var(--amber);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+      margin-top: 4px;
+      padding: 12px 16px;
+    }
+
+    .hint-box strong { color: var(--ink); }
+
+    .hint-toggle {
+      background: none;
+      border: none;
+      color: var(--amber);
+      cursor: pointer;
+      font: 12px inherit;
+      font-weight: bold;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .answer-toggle {
+      background: none;
+      border: 1px solid var(--green);
+      border-radius: 5px;
+      color: var(--green);
+      cursor: pointer;
+      font: 12px inherit;
+      font-weight: 600;
+      margin-left: 8px;
+      padding: 3px 10px;
+      transition: background .15s, color .15s;
+    }
+
+    .answer-toggle:hover {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .kbd-hint {
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    .kbd-hint kbd {
+      background: #e8e4d8;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-family: inherit;
+      padding: 1px 5px;
+    }
+
+    /* Loading state */
+    .loading-msg {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 14px 18px;
+    }
+
+    @media (max-width: 860px) {
+      .demo-layout { grid-template-columns: minmax(0, 1fr); }
+      .demo-layout > *, .demo-main, .exercises-panel { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    <nav class="site-nav" id="site-nav" aria-label="项目导航">
+      <a href="../index.html#projects">全部作品</a>
+      <a class="nav-contact" href="../index.html#contact">联系</a>
+    </nav>
+  </header>
+
+  <main class="case-main">
+    <a class="back-link" href="../index.html#projects">← 返回作品列表</a>
+
+    <!-- Case study header -->
+    <header class="case-hero">
+      <p class="eyebrow">DATA PRODUCT / CASE 07</p>
+      <h1>交互式互联网指标<br>SQL 练习器</h1>
+      <p class="case-summary">在浏览器中运行真实 SQL 查询，围绕互联网常用业务指标设计练习场景——无需注册、无需后端，打开即可使用。</p>
+      <dl class="case-facts">
+        <div><dt>核心技术</dt><dd>纯前端 / AlaSQL 引擎</dd></div>
+        <div><dt>运行环境</dt><dd>浏览器内 SQLite 兼容</dd></div>
+        <div><dt>形态</dt><dd>可嵌入 GitHub Pages</dd></div>
+      </dl>
+      <div class="case-actions-inline">
+        <a class="button primary" href="#demo">运行在线 Demo</a>
+        <a class="button secondary" href="#extension">查看延伸方向</a>
+      </div>
+    </header>
+
+    <div class="case-body">
+      <nav class="case-nav" aria-label="页内导航">
+        <a href="#challenge">背景</a>
+        <a href="#design">设计</a>
+        <a href="#demo">在线体验</a>
+        <a href="#value">价值</a>
+        <a href="#extension">延伸</a>
+      </nav>
+
+      <article class="case-content">
+        <section id="challenge">
+          <h2>业务背景</h2>
+          <p>掌握 SQL 不只是会写语法，还需要理解指标定义、数据粒度与分析动作。传统学习材料常把这三者拆开，练习结果很难映射到实际工作情境。</p>
+        </section>
+
+        <section id="design">
+          <h2>产品设计</h2>
+          <p>我把练习题目、模拟数据、查询编辑器和结果表格集中在一个页面，让使用者在同一界面完成「理解指标 → 编写 SQL → 运行验证 → 复盘口径」的完整循环。</p>
+          <div class="case-flow" aria-label="使用流程">
+            <span>选择练习题</span><span>查看数据表结构</span><span>编写 SQL</span><span>运行查询</span><span>复盘口径</span>
+          </div>
+        </section>
+
+        <!-- ===== LIVE DEMO ===== -->
+        <section id="demo">
+          <h2>在线体验</h2>
+          <p>以下练习器在浏览器中运行真实 SQL 查询（基于 AlaSQL 引擎）。数据为模拟业务场景，覆盖 DAU、GMV、留存率等常用互联网指标。</p>
+
+          <div class="demo-section" id="liveDemo">
+            <div id="loadingMsg" class="loading-msg">⏳ 正在加载 SQL 引擎，请稍候…</div>
+
+            <div class="demo-layout" id="demoLayout" style="display:none;">
+
+              <!-- Left: Exercises -->
+              <aside class="exercises-panel">
+                <h3>练习题目</h3>
+
+                <div class="ex-item active" data-ex="0">
+                  <div class="ex-num">01</div>
+                  <div class="ex-title">日活用户数 (DAU)</div>
+                  <div class="ex-desc">按日期统计每天的活跃用户数</div>
+                </div>
+
+                <div class="ex-item" data-ex="1">
+                  <div class="ex-num">02</div>
+                  <div class="ex-title">各渠道 GMV</div>
+                  <div class="ex-desc">按注册渠道汇总已支付订单金额</div>
+                </div>
+
+                <div class="ex-item" data-ex="2">
+                  <div class="ex-num">03</div>
+                  <div class="ex-title">品类营收排名</div>
+                  <div class="ex-desc">找出营收 Top 5 的商品品类</div>
+                </div>
+
+                <div class="ex-item" data-ex="3">
+                  <div class="ex-num">04</div>
+                  <div class="ex-title">用户下单转化率</div>
+                  <div class="ex-desc">计算注册用户中有过下单行为的比例</div>
+                </div>
+
+                <div class="ex-item" data-ex="4">
+                  <div class="ex-num">05</div>
+                  <div class="ex-title">次日留存用户</div>
+                  <div class="ex-desc">找出注册后次日仍有登录的用户</div>
+                </div>
+              </aside>
+
+              <!-- Right: Editor + Results -->
+              <div class="demo-main">
+
+                <!-- Schema viewer -->
+                <div class="schema-area">
+                  <div class="schema-tabs">
+                    <button class="schema-tab active" data-tab="users">users</button>
+                    <button class="schema-tab" data-tab="events">events</button>
+                    <button class="schema-tab" data-tab="orders">orders</button>
+                  </div>
+                  <div id="tab-users" class="schema-body active">
+                    <table class="schema-table">
+                      <thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead>
+                      <tbody>
+                        <tr><td>user_id</td><td class="col-type">INT</td><td>用户ID（主键）</td></tr>
+                        <tr><td>username</td><td class="col-type">VARCHAR</td><td>用户名</td></tr>
+                        <tr><td>reg_date</td><td class="col-type">DATE</td><td>注册日期</td></tr>
+                        <tr><td>channel</td><td class="col-type">VARCHAR</td><td>注册渠道（organic/paid_search/social/referral）</td></tr>
+                        <tr><td>city</td><td class="col-type">VARCHAR</td><td>城市</td></tr>
+                        <tr><td>tier</td><td class="col-type">VARCHAR</td><td>用户等级（VIP/standard/new）</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div id="tab-events" class="schema-body">
+                    <table class="schema-table">
+                      <thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead>
+                      <tbody>
+                        <tr><td>event_id</td><td class="col-type">INT</td><td>事件ID</td></tr>
+                        <tr><td>user_id</td><td class="col-type">INT</td><td>用户ID（关联 users）</td></tr>
+                        <tr><td>event_date</td><td class="col-type">DATE</td><td>事件日期</td></tr>
+                        <tr><td>event_type</td><td class="col-type">VARCHAR</td><td>事件类型（login/browse/share）</td></tr>
+                        <tr><td>duration_sec</td><td class="col-type">INT</td><td>会话时长（秒）</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div id="tab-orders" class="schema-body">
+                    <table class="schema-table">
+                      <thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead>
+                      <tbody>
+                        <tr><td>order_id</td><td class="col-type">INT</td><td>订单ID</td></tr>
+                        <tr><td>user_id</td><td class="col-type">INT</td><td>用户ID（关联 users）</td></tr>
+                        <tr><td>order_date</td><td class="col-type">DATE</td><td>下单日期</td></tr>
+                        <tr><td>amount</td><td class="col-type">DECIMAL</td><td>订单金额（元）</td></tr>
+                        <tr><td>category</td><td class="col-type">VARCHAR</td><td>商品品类</td></tr>
+                        <tr><td>status</td><td class="col-type">VARCHAR</td><td>订单状态（paid/cancelled/refunded）</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Hint box -->
+                <div id="hintBox" class="hint-box"></div>
+
+                <!-- SQL Editor -->
+                <div class="editor-area">
+                  <div class="editor-toolbar">
+                    <span class="editor-label">SQL 查询</span>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <span class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> 运行</span>
+                      <button class="btn-run" id="btnRun" onclick="runQuery()">▶ 运行查询</button>
+                    </div>
+                  </div>
+                  <textarea id="sqlEditor" spellcheck="false" autocomplete="off"
+                    placeholder="-- 在这里写 SQL..."
+                  ></textarea>
+                </div>
+
+                <!-- Results -->
+                <div class="result-area">
+                  <div class="result-header">
+                    <span>查询结果</span>
+                    <span class="result-badge" id="resultBadge" style="display:none;"></span>
+                  </div>
+                  <div id="resultBody">
+                    <div class="result-placeholder">运行 SQL 后结果将显示在这里</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="value">
+          <h2>我展示的能力</h2>
+          <p>该项目体现了把业务指标理解转化为轻量交互产品的能力：既关注 SQL 分析逻辑，也考虑学习者如何获得即时可验证的反馈。整个 Demo 为纯静态页面，可无缝部署到 GitHub Pages。</p>
+          <div class="proof-panel">
+            <div class="proof-header">
+              <div><h3>可直接验证的交付物</h3><p>无需截图，访问者可在当前页面亲自运行查询并查看返回结果</p></div>
+              <span class="proof-badge">实时 Demo</span>
+            </div>
+            <div class="evidence-metrics">
+              <div class="evidence-metric"><strong>5</strong><span>指标练习题</span></div>
+              <div class="evidence-metric"><strong>3</strong><span>模拟业务数据表</span></div>
+              <div class="evidence-metric"><strong>50</strong><span>行为事件样本</span></div>
+              <div class="evidence-metric"><strong>0</strong><span>所需后端服务</span></div>
+            </div>
+          </div>
+        </section>
+        <section id="extension">
+          <h2>还可以延伸到什么</h2>
+          <div class="extension-grid">
+            <article class="extension-card"><h3>岗位化题库</h3><p>将练习主题扩展为增长、运营、风控等岗位常用指标与案例任务。</p></article>
+            <article class="extension-card"><h3>答案评测反馈</h3><p>比较查询结果与标准口径，自动指出过滤条件、粒度或关联逻辑偏差。</p></article>
+            <article class="extension-card"><h3>企业数据训练营</h3><p>在脱敏数据集上配置内部指标字典，作为新人分析能力训练工具。</p></article>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Yilin.</span>
+    <a href="../index.html">返回首页</a>
+  </footer>
+
+  <!-- AlaSQL engine from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/alasql@3.1.0/dist/alasql.min.js"
+    onerror="handleAlaError()"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ---- Exercise definitions ---- */
+    const EXERCISES = [
+      {
+        title: 'DAU — 按日统计活跃用户数',
+        question: '请统计 events 表中，每天有多少不重复的活跃用户（DAU），结果按日期升序排列。',
+        hint: '提示：从 <strong>events</strong> 表中，用 <code>COUNT(DISTINCT user_id)</code> 按 <code>event_date</code> 分组，即可得到每日不重复活跃用户数。',
+        starter: `-- 题目：按日统计活跃用户数 (DAU)
+SELECT ...
+FROM events
+GROUP BY ...
+ORDER BY ...;`,
+        answer: `SELECT event_date AS [日期],
+       COUNT(DISTINCT user_id) AS DAU
+FROM events
+GROUP BY event_date
+ORDER BY event_date;`
+      },
+      {
+        title: '各注册渠道 GMV',
+        question: '请计算各注册渠道的已支付订单 GMV（总金额），结果按 GMV 从高到低排列。',
+        hint: '提示：<strong>orders</strong> 与 <strong>users</strong> 通过 <code>user_id</code> 关联，筛选 <code>status = \'paid\'</code>，再按 <code>channel</code> 分组求 <code>SUM(amount)</code>。',
+        starter: `-- 题目：各渠道已支付订单 GMV
+SELECT u.channel, ...
+FROM orders o
+  JOIN users u ON o.user_id = u.user_id
+WHERE ...
+GROUP BY ...
+ORDER BY ...;`,
+        answer: `SELECT u.channel AS [渠道],
+       COUNT(o.order_id) AS [订单数],
+       ROUND(SUM(o.amount), 2) AS GMV
+FROM orders o
+  JOIN users u ON o.user_id = u.user_id
+WHERE o.status = 'paid'
+GROUP BY u.channel
+ORDER BY GMV DESC;`
+      },
+      {
+        title: '品类营收 Top 5',
+        question: '请找出营收最高的 5 个商品品类（仅统计已支付订单），展示品类、订单数和总营收。',
+        hint: '提示：筛选 <code>status = \'paid\'</code> 的订单，按 <code>category</code> 分组求和后 <code>ORDER BY … DESC LIMIT 5</code>。',
+        starter: `-- 题目：营收 Top 5 品类
+SELECT category, ...
+FROM orders
+WHERE ...
+GROUP BY ...
+ORDER BY ...
+LIMIT 5;`,
+        answer: `SELECT category AS [品类],
+       COUNT(*) AS [订单数],
+       ROUND(SUM(amount), 2) AS [营收]
+FROM orders
+WHERE status = 'paid'
+GROUP BY category
+ORDER BY [营收] DESC
+LIMIT 5;`
+      },
+      {
+        title: '用户下单转化率',
+        question: '请计算注册用户中有过下单行为的比例（转化率），结果保留两位小数。',
+        hint: '提示：用子查询或 JOIN 统计 <strong>users</strong> 总数与 <strong>orders</strong> 中出现过的不重复 user_id 数，二者相除即转化率。',
+        starter: `-- 题目：用户下单转化率
+SELECT
+  COUNT(DISTINCT u.user_id) AS [总注册用户],
+  COUNT(DISTINCT o.user_id) AS [有下单用户],
+  ROUND(... * 100.0 / ..., 2) AS [转化率_pct]
+FROM users u
+  LEFT JOIN orders o ON ...;`,
+        answer: `SELECT
+  COUNT(DISTINCT u.user_id) AS [总注册用户],
+  COUNT(DISTINCT o.user_id) AS [有下单用户],
+  ROUND(COUNT(DISTINCT o.user_id) * 100.0
+        / COUNT(DISTINCT u.user_id), 2) AS [转化率_pct]
+FROM users u
+  LEFT JOIN orders o ON u.user_id = o.user_id;`
+      },
+      {
+        title: '次日留存用户',
+        question: '请找出所有在注册后第二天仍有登录事件的用户，展示用户 ID、用户名、注册日期和次日活跃日期。',
+        hint: '提示：连接 <strong>users</strong> 与 <strong>events</strong> 后，用 <code>DATEDIFF(day, reg_date, event_date) = 1</code> 找出注册次日仍有行为的用户。',
+        starter: `-- 题目：次日留存用户
+SELECT u.user_id, u.username, u.reg_date, e.event_date
+FROM users u
+  JOIN events e ON ...
+WHERE DATEDIFF(...) = 1
+ORDER BY u.reg_date;`,
+        answer: `SELECT u.user_id AS [用户ID],
+       u.username AS [用户名],
+       u.reg_date AS [注册日期],
+       e.event_date AS [次日活跃日期]
+FROM users u
+  JOIN events e ON u.user_id = e.user_id
+WHERE DATEDIFF(day, u.reg_date, e.event_date) = 1
+ORDER BY u.reg_date;`
+      }
+    ];
+
+    let currentEx = 0;
+    let engineReady = false;
+
+    /* ---- Schema tab switching ---- */
+    document.querySelectorAll('.schema-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.schema-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.schema-body').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+      });
+    });
+
+    /* ---- Exercise selection ---- */
+    document.querySelectorAll('.ex-item').forEach(item => {
+      item.addEventListener('click', function () {
+        document.querySelectorAll('.ex-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        currentEx = parseInt(this.dataset.ex, 10);
+        loadExercise(currentEx);
+      });
+    });
+
+    function loadExercise(idx) {
+      const ex = EXERCISES[idx];
+      document.getElementById('sqlEditor').value = ex.starter;
+      document.getElementById('hintBox').innerHTML =
+        '<div style="margin-bottom:6px;font-size:13.5px;color:var(--ink);">' + ex.question + '</div>' +
+        '<button class="hint-toggle" onclick="toggleHint()">💡 查看提示</button>' +
+        '<button class="answer-toggle" onclick="revealAnswer(' + idx + ')">查看参考答案</button>' +
+        '<div id="hintContent" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #f0d8a8;">' + ex.hint + '</div>';
+      clearResult();
+    }
+
+    window.toggleHint = function () {
+      const c = document.getElementById('hintContent');
+      c.style.display = c.style.display === 'none' ? 'block' : 'none';
+    };
+
+    window.revealAnswer = function (idx) {
+      document.getElementById('sqlEditor').value = EXERCISES[idx].answer;
+    };
+
+    function clearResult() {
+      document.getElementById('resultBody').innerHTML =
+        '<div class="result-placeholder">运行 SQL 后结果将显示在这里</div>';
+      const badge = document.getElementById('resultBadge');
+      badge.style.display = 'none';
+    }
+
+    /* ---- Run query ---- */
+    window.runQuery = function () {
+      if (!engineReady) return;
+      const sql = document.getElementById('sqlEditor').value.trim();
+      if (!sql) return;
+
+      const btn = document.getElementById('btnRun');
+      btn.disabled = true;
+      btn.textContent = '执行中…';
+
+      setTimeout(() => {
+        try {
+          const rows = alasql(sql);
+          renderResult(rows);
+        } catch (e) {
+          renderError(e.message || String(e));
+        }
+        btn.disabled = false;
+        btn.innerHTML = '▶ 运行查询';
+      }, 60);
+    };
+
+    // Ctrl+Enter shortcut
+    document.getElementById('sqlEditor').addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runQuery();
+      }
+    });
+
+    function renderResult(rows) {
+      const badge = document.getElementById('resultBadge');
+      const body = document.getElementById('resultBody');
+
+      if (!rows || rows.length === 0) {
+        badge.className = 'result-badge';
+        badge.textContent = '0 行';
+        badge.style.display = 'inline';
+        body.innerHTML = '<div class="result-placeholder">查询成功，但没有返回数据（0 行）</div>';
+        return;
+      }
+
+      badge.className = 'result-badge';
+      badge.textContent = rows.length + ' 行';
+      badge.style.display = 'inline';
+
+      const cols = Object.keys(rows[0]);
+      let html = '<div style="overflow:auto;"><table class="result-data-table"><thead><tr>';
+      cols.forEach(c => { html += '<th>' + escHtml(c) + '</th>'; });
+      html += '</tr></thead><tbody>';
+      rows.forEach(row => {
+        html += '<tr>';
+        cols.forEach(c => {
+          const v = row[c];
+          html += '<td>' + (v == null ? '<em style="color:#aaa">NULL</em>' : escHtml(String(v))) + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      body.innerHTML = html;
+    }
+
+    function renderError(msg) {
+      const badge = document.getElementById('resultBadge');
+      badge.className = 'result-badge error';
+      badge.textContent = '错误';
+      badge.style.display = 'inline';
+      document.getElementById('resultBody').innerHTML =
+        '<div class="result-error">⚠ ' + escHtml(msg) + '</div>';
+    }
+
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /* ---- Seed data ---- */
+    function seedData() {
+      alasql('DROP TABLE IF EXISTS users');
+      alasql('DROP TABLE IF EXISTS events');
+      alasql('DROP TABLE IF EXISTS orders');
+
+      alasql(`CREATE TABLE users (
+        user_id INT, username STRING, reg_date STRING,
+        channel STRING, city STRING, tier STRING
+      )`);
+
+      const userRows = [
+        [1,'alice','2024-01-02','organic','北京','VIP'],
+        [2,'bob','2024-01-03','paid_search','上海','standard'],
+        [3,'carol','2024-01-03','social','广州','new'],
+        [4,'dave','2024-01-04','referral','深圳','standard'],
+        [5,'eva','2024-01-05','organic','成都','VIP'],
+        [6,'frank','2024-01-06','paid_search','北京','new'],
+        [7,'grace','2024-01-07','social','上海','standard'],
+        [8,'henry','2024-01-08','organic','广州','VIP'],
+        [9,'iris','2024-01-09','referral','深圳','new'],
+        [10,'jack','2024-01-10','paid_search','成都','standard'],
+        [11,'kate','2024-01-11','organic','北京','VIP'],
+        [12,'leo','2024-01-12','social','上海','standard'],
+        [13,'mia','2024-01-13','referral','广州','new'],
+        [14,'noah','2024-01-14','organic','深圳','standard'],
+        [15,'olivia','2024-01-15','paid_search','成都','VIP'],
+        [16,'paul','2024-01-16','social','北京','new'],
+        [17,'quinn','2024-01-17','organic','上海','standard'],
+        [18,'rose','2024-01-18','referral','广州','VIP'],
+        [19,'sam','2024-01-19','paid_search','深圳','new'],
+        [20,'tina','2024-01-20','organic','成都','standard']
+      ];
+      userRows.forEach(r => alasql('INSERT INTO users VALUES (?,?,?,?,?,?)', r));
+
+      alasql(`CREATE TABLE events (
+        event_id INT, user_id INT, event_date STRING,
+        event_type STRING, duration_sec INT
+      )`);
+
+      const evRows = [
+        [1,1,'2024-01-02','login',120],[2,2,'2024-01-03','login',95],
+        [3,1,'2024-01-03','browse',340],[4,3,'2024-01-03','login',80],
+        [5,2,'2024-01-04','login',210],[6,4,'2024-01-04','login',60],
+        [7,1,'2024-01-04','share',45],[8,5,'2024-01-05','login',180],
+        [9,3,'2024-01-05','browse',260],[10,2,'2024-01-05','login',130],
+        [11,6,'2024-01-06','login',90],[12,5,'2024-01-06','browse',400],
+        [13,1,'2024-01-06','login',200],[14,7,'2024-01-07','login',75],
+        [15,4,'2024-01-07','browse',310],[16,8,'2024-01-08','login',160],
+        [17,6,'2024-01-08','share',55],[18,3,'2024-01-08','login',110],
+        [19,9,'2024-01-09','login',70],[20,8,'2024-01-09','browse',290],
+        [21,10,'2024-01-10','login',140],[22,7,'2024-01-10','share',40],
+        [23,5,'2024-01-10','login',220],[24,11,'2024-01-11','login',185],
+        [25,9,'2024-01-11','browse',350],[26,12,'2024-01-12','login',100],
+        [27,11,'2024-01-12','share',60],[28,10,'2024-01-12','login',115],
+        [29,13,'2024-01-13','login',80],[30,12,'2024-01-13','browse',280],
+        [31,14,'2024-01-14','login',155],[32,13,'2024-01-14','share',50],
+        [33,15,'2024-01-15','login',200],[34,14,'2024-01-15','browse',360],
+        [35,16,'2024-01-16','login',65],[36,15,'2024-01-16','share',45],
+        [37,17,'2024-01-17','login',175],[38,16,'2024-01-17','browse',240],
+        [39,18,'2024-01-18','login',190],[40,17,'2024-01-18','share',55],
+        [41,19,'2024-01-19','login',85],[42,18,'2024-01-19','browse',310],
+        [43,20,'2024-01-20','login',145],[44,19,'2024-01-20','share',40],
+        [45,1,'2024-01-21','login',230],[46,20,'2024-01-21','browse',280],
+        [47,5,'2024-01-21','login',160],[48,11,'2024-01-21','share',70],
+        [49,15,'2024-01-22','login',195],[50,8,'2024-01-22','browse',320]
+      ];
+      evRows.forEach(r => alasql('INSERT INTO events VALUES (?,?,?,?,?)', r));
+
+      alasql(`CREATE TABLE orders (
+        order_id INT, user_id INT, order_date STRING,
+        amount FLOAT, category STRING, status STRING
+      )`);
+
+      const ordRows = [
+        [1,1,'2024-01-03',299.9,'电子产品','paid'],
+        [2,2,'2024-01-04',89.5,'图书','paid'],
+        [3,3,'2024-01-04',450.0,'服装','cancelled'],
+        [4,1,'2024-01-05',1299.0,'电子产品','paid'],
+        [5,5,'2024-01-06',78.0,'食品','paid'],
+        [6,4,'2024-01-07',356.0,'家居','paid'],
+        [7,6,'2024-01-08',199.9,'服装','paid'],
+        [8,2,'2024-01-09',42.0,'图书','paid'],
+        [9,7,'2024-01-09',588.0,'电子产品','refunded'],
+        [10,8,'2024-01-10',125.0,'食品','paid'],
+        [11,5,'2024-01-11',679.0,'家居','paid'],
+        [12,9,'2024-01-11',55.5,'图书','paid'],
+        [13,10,'2024-01-12',2499.0,'电子产品','paid'],
+        [14,11,'2024-01-13',310.0,'服装','paid'],
+        [15,3,'2024-01-13',88.0,'食品','paid'],
+        [16,12,'2024-01-14',430.0,'家居','paid'],
+        [17,6,'2024-01-14',65.0,'图书','cancelled'],
+        [18,13,'2024-01-15',899.0,'电子产品','paid'],
+        [19,14,'2024-01-16',210.0,'服装','paid'],
+        [20,15,'2024-01-17',145.0,'食品','paid'],
+        [21,8,'2024-01-17',780.0,'家居','paid'],
+        [22,16,'2024-01-18',33.0,'图书','paid'],
+        [23,1,'2024-01-18',3599.0,'电子产品','paid'],
+        [24,17,'2024-01-19',255.0,'服装','paid'],
+        [25,18,'2024-01-20',98.0,'食品','paid'],
+        [26,11,'2024-01-20',960.0,'家居','paid'],
+        [27,19,'2024-01-21',47.0,'图书','paid'],
+        [28,20,'2024-01-21',1099.0,'电子产品','refunded'],
+        [29,15,'2024-01-22',185.0,'服装','paid'],
+        [30,5,'2024-01-22',162.0,'食品','paid']
+      ];
+      ordRows.forEach(r => alasql('INSERT INTO orders VALUES (?,?,?,?,?,?)', r));
+    }
+
+    /* ---- Init ---- */
+    function initEngine() {
+      seedData();
+      engineReady = true;
+      document.getElementById('loadingMsg').style.display = 'none';
+      document.getElementById('demoLayout').style.display = 'grid';
+      loadExercise(0);
+    }
+
+    window.handleAlaError = function () {
+      document.getElementById('loadingMsg').innerHTML =
+        '⚠ SQL 引擎加载失败（需要网络连接）。请检查网络后刷新页面重试。';
+    };
+
+    // Wait for alasql to be ready
+    function tryInit() {
+      if (typeof alasql !== 'undefined') {
+        initEngine();
+      } else {
+        setTimeout(tryInit, 200);
+      }
+    }
+
+    tryInit();
+  })();
+  </script>
+</body>
+</html>
