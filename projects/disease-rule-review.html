@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>疾病推断规则 AI 复核 | Yilin</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=20260527c">
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    <nav class="site-nav" id="site-nav" aria-label="项目导航">
+      <a href="../index.html#projects">全部作品</a>
+      <a class="nav-contact" href="../index.html#contact">联系</a>
+    </nav>
+  </header>
+  <main class="case-main">
+    <a class="back-link" href="../index.html#projects">← 返回作品列表</a>
+    <header class="case-hero">
+      <p class="eyebrow">PRODUCTIVITY / AI REVIEW / CASE 05</p>
+      <h1>疾病推断规则 AI 复核</h1>
+      <p class="case-summary">使用 Codex 联网搜索对历史疾病推断规则进行准确性核查，识别过时或存疑的规则条目并推动更新，提升规则库整体质量。</p>
+      <dl class="case-facts">
+        <div><dt>角色</dt><dd>复核方案设计 / 提示词撰写</dd></div>
+        <div><dt>工具</dt><dd>Codex · 联网搜索 · 对比验证</dd></div>
+        <div><dt>状态</dt><dd>审计判定框架已形成</dd></div>
+      </dl>
+      <div class="case-actions-inline">
+        <a class="button primary" href="#evidence">查看审计判定</a>
+        <a class="button secondary" href="#extension">查看延伸方向</a>
+      </div>
+    </header>
+    <div class="case-body">
+      <nav class="case-nav" aria-label="页内导航">
+        <a href="#challenge">背景</a>
+        <a href="#solution">方案</a>
+        <a href="#evidence">审计</a>
+        <a href="#outcome">成果</a>
+        <a href="#learning">沉淀</a>
+        <a href="#extension">延伸</a>
+      </nav>
+      <article class="case-content">
+        <section id="challenge">
+          <h2>业务背景</h2>
+          <p>历史积累的疾病推断规则数量较多，随着医学指南更新，部分规则已过时或存在争议，但人工逐条核查耗时极长，难以持续维护。</p>
+        </section>
+        <section id="solution">
+          <h2>我的方案</h2>
+          <p>我设计了一套 AI 辅助复核流程：提供规则内容，让 Codex 搜索最新医学权威资料进行对比核验，输出「准确/存疑/过时」的判断及依据，存疑和过时条目进入人工复审队列。</p>
+          <div class="case-flow"><span>输入规则内容</span><span>Codex 联网核查</span><span>权威资料对比</span><span>准确性评级</span><span>问题条目标记</span></div>
+        </section>
+        <section id="evidence">
+          <h2>审计判定：哪些规则能保留</h2>
+          <p>规则复核不是让 AI 扩写解释，而是让每一条推断接受证据审查。生产可用版本应只保留“词项精确、官方证据可追溯、批准适应症方向唯一”的条目。</p>
+          <div class="validation-steps">
+            <article class="validation-step"><span>KEEP</span><h3>可保留</h3><p>精确药品词项仅支持一个疾病方向，且官方证据与审计日期完整。</p></article>
+            <article class="validation-step"><span>REVIEW</span><h3>转人工</h3><p>存在多适应症、表述范围过宽或证据间不一致，暂停自动推断。</p></article>
+            <article class="validation-step"><span>REJECT</span><h3>剔除</h3><p>预防、辅助、诊断性产品或无足够官方证据支撑的条目。</p></article>
+          </div>
+          <div class="proof-panel">
+            <div class="proof-header">
+              <div><h3>规则审计队列 / 公开展示字段</h3><p>规则词项、证据状态、判定原因和后续动作完整留痕</p></div>
+              <span class="proof-badge sample">脱敏结构演示</span>
+            </div>
+            <table class="evidence-table">
+              <thead><tr><th>规则词项</th><th>初始候选</th><th>审计风险</th><th>后续动作</th></tr></thead>
+              <tbody>
+                <tr><td>利妥昔单抗注射液</td><td>恶性肿瘤</td><td>可能多适应症，不能唯一指向</td><td><span class="status-pill review">转医学复核</span></td></tr>
+                <tr><td>中心静脉套件</td><td>重症疾病</td><td>使用场景广泛，非单病种证据</td><td><span class="status-pill reject">禁止直推</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">公开展示强调方法边界：样例用于展示判定机制，不构成正式疾病推断规则；正式规则必须以审计日期当日可辩护的官方证据完成审核。</p>
+        </section>
+        <section id="outcome">
+          <h2>成果</h2>
+          <p>形成了一套保守的审计方法：将可直推、需复核和禁止直推的条目分层输出，并为存疑项目保留核查原因与人工处理路径。</p>
+          <p class="note">说明：本页公开展示审计机制及脱敏样例，不涉及客户数据，也不宣称样例已成为生产规则。</p>
+        </section>
+        <section id="learning">
+          <h2>价值与沉淀</h2>
+          <p>AI 在规则复核中扮演的是「初审筛查」角色——它能快速缩小人工复核的范围，但最终判断仍需领域专家把关。这种人机分工方式在保证质量的同时大幅提升了效率。</p>
+        </section>
+        <section id="extension">
+          <h2>还可以延伸到什么</h2>
+          <div class="extension-grid">
+            <article class="extension-card"><h3>官方来源清洁库</h3><p>仅保留官方证据充分且可直推的规则，形成部署前的干净版本。</p></article>
+            <article class="extension-card"><h3>规则变更巡检</h3><p>监测新增适应症与证据失效，自动触发复核任务与下线提醒。</p></article>
+            <article class="extension-card"><h3>风险解释报告</h3><p>将推断依据、驳回原因和审核结论输出为可审计报告。</p></article>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Yilin.</span>
+    <a href="../index.html">返回首页</a>
+  </footer>
+</body>
+</html>
