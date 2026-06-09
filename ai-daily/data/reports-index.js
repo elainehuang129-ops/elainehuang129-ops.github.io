@@ -1,0 +1,26 @@
+window.AI_DAILY_DATA = {
+  "generated_at": "2026-06-09T00:00:00.000Z",
+  "report_count": 1,
+  "reports": [
+    {
+      "report_date": "2026-06-09",
+      "issue_number": "017",
+      "title": "2026年6月9日 AI 日报",
+      "summary": "过去 24 小时的高置信变化集中在三条线：OpenAI 同时推进资本市场选项、经济研究叙事与长期平台定位；英国把 AI 从鼓励创新推进到算力、采用与监管沙盒的成套政策；产业侧继续围绕算力供给与芯片制造重排合作关系。",
+      "tags": ["OpenAI", "英国政策", "算力", "芯片", "资本市场", "AI 采用", "产业战略"],
+      "status": "published",
+      "mood": "观察",
+      "items": [
+        {"sort_order":1,"headline":"OpenAI 宣布已向 SEC 递交保密 S-1，为 IPO 保留更早上市选项","brief":"OpenAI 于 2026 年 6 月 8 日发布声明，确认已保密提交 S-1 草案，但尚未决定具体上市时间。","commentary":"前沿模型竞争正在从技术竞赛升级为资本开支、治理透明度与财务可解释性的综合竞赛。","sources":[{"sort_order":1,"source_name":"OpenAI","source_url":"https://openai.com/index/openai-submits-confidential-s-1/","source_type":"official"}]},
+        {"sort_order":2,"headline":"OpenAI 推出 Economic Research Exchange，开放外部研究者研究 AI 经济影响","brief":"OpenAI 启动 Economic Research Exchange，面向外部研究者征集围绕劳动、生产率、企业、教育与不平等等议题的项目。","commentary":"OpenAI 正把产品使用数据从内部运营资产延伸为政策与学术影响力资产。","sources":[{"sort_order":1,"source_name":"OpenAI","source_url":"https://openai.com/index/economic-research-exchange/","source_type":"official"}]},
+        {"sort_order":3,"headline":"OpenAI 发布 Built to benefit everyone 计划，宣布进入第三阶段","brief":"OpenAI 发文称核心问题不再只是前沿能力，而是让先进 AI 变得充足、可负担、安全、实用且易于广泛使用。","commentary":"OpenAI 正把自己进一步定义为围绕经济基础设施、普及分发和社会治理展开的平台型公司。","sources":[{"sort_order":1,"source_name":"OpenAI","source_url":"https://openai.com/index/built-to-benefit-everyone-our-plan/","source_type":"official"}]},
+        {"sort_order":4,"headline":"英国发布 11 亿英镑 AI Hardware Plan，押注本土芯片与国家级算力","brief":"英国政府公布 AI Hardware Plan，包括国家 AI 超算投入、下一代 AI 芯片采购、硬件公司基金和人才培养计划。","commentary":"主权 AI 竞争已经进入谁控制硬件与电力约束的阶段。","sources":[{"sort_order":1,"source_name":"GOV.UK","source_url":"https://www.gov.uk/government/news/a-decisive-shift-to-power-british-ai-new-11-billion-plan-to-back-chip-firms-boost-computing-power-and-skills-for-the-ai-revolution","source_type":"official"}]},
+        {"sort_order":5,"headline":"英国在 AI Adoption Summit 推出逾 2 亿英镑采用计划","brief":"英国政府宣布支持企业采用 AI，并与 OpenAI、Google、Anthropic、Microsoft 建立合作。","commentary":"头部模型公司逐步成为政府制定生产率和产业政策时的数据与方法伙伴。","sources":[{"sort_order":1,"source_name":"GOV.UK","source_url":"https://www.gov.uk/government/news/government-to-partner-with-tech-companies-trade-unions-and-industry-leaders-to-boost-ai-adoption-and-equip-workers-with-ai-skills","source_type":"official"}]},
+        {"sort_order":6,"headline":"英国先在法律服务业启动 AI Growth Labs，用监管沙盒推动 LawTech 落地","brief":"英国政府宣布法律服务业将成为 AI Growth Labs 的首个试点行业。","commentary":"监管沙盒比抽象原则更接近真实商业落地。","sources":[{"sort_order":1,"source_name":"GOV.UK","source_url":"https://www.gov.uk/government/news/legal-innovation-to-be-supercharged-by-new-ai-growth-project","source_type":"official"}]},
+        {"sort_order":7,"headline":"Reuters：Alphabet 据报下单让 Intel 在 2028 年代工逾 300 万颗 TPU","brief":"Reuters 援引 The Information 报道称，Google 已向 Intel 下单，计划在 2028 年生产超过 300 万颗自研 TPU。","commentary":"大模型时代的关键瓶颈已从有没有模型转向谁能锁定先进制造产能。","sources":[{"sort_order":1,"source_name":"Reuters/Yahoo Finance","source_url":"https://finance.yahoo.com/sectors/technology/articles/google-nvidia-consider-intel-backup-131234077.html","source_type":"media"}]},
+        {"sort_order":8,"headline":"Reuters：NVIDIA 与 LG 集团合作推进人形机器人与数据中心项目","brief":"Reuters 报道，NVIDIA CEO 黄仁勋表示公司正与 LG 集团合作推进人形机器人和数据中心相关项目。","commentary":"NVIDIA 试图把 GPU 平台从训练与推理基础设施延伸到具身智能和本地产业系统。","sources":[{"sort_order":1,"source_name":"Reuters/Yahoo Finance","source_url":"https://finance.yahoo.com/sectors/technology/articles/nvidia-ceo-says-company-working-023727300.html","source_type":"media"}]}
+      ],
+      "business_analysis": {"main_theme":"今日产业主线不是新模型跑分，而是 AI 公司与政府同时在重写资本市场、产业政策和基础设施供给之间的关系。","market_structure":"市场格局正从模型公司之间的竞争，转向平台公司、政府与基础设施供应链的三方博弈。","commercialization":"商业化路径进一步分层：上游通过硬件和云资源变现，中游通过 API 与企业订阅变现，下游通过工作流入口、分发和生态抽成提高 ARPU。","strategic_implications":"未来护城河不只来自模型效果，还来自融资能力、数据治理、监管协同和供应链锁定。","long_term_investment_view":"长期价值需要区分技术领先、商业质量和估值。反证风险包括资本开支回收慢、毛利被基础设施成本挤压、监管沙盒无法转化为规模化收入。","tracking_metrics":["OpenAI 后续公开文件对收入结构、资本开支、推理成本和企业业务占比的披露。","英国 AI Hardware Plan 后续是否落到具体采购、基金投资和企业采用案例。","Google、Intel、NVIDIA 等上游公司后续披露的制造产能锁定、长期供货协议和数据中心订单节奏。"],"thinking_questions":["当 AI 公司同时经营资本市场、政策叙事和产品入口时，哪一层最容易形成真正的长期护城河？","主权 AI 政策如果更多流向算力与硬件，应用层公司如何证明自己不只是上游 capex 的需求附庸？"]}
+    }
+  ]
+};
