@@ -7,7 +7,7 @@
 - 正式首页 `index.html`：滚动式作品集入口，集中展示代表项目、工具链、Prompt 与个人介绍。
 - 演示模式 `presentation.html`：八页演示式作品集，内置浏览器编辑、拖拽、页面管理和 HTML 导出能力。
 - 兼容入口 `classic-index.html`：自动跳转到正式首页，保留旧访问地址。
-- 八个首页展示的脱敏案例详情页，另保留一个既有工作流恢复详情页。
+- 九个首页展示的脱敏案例详情页，另保留一个既有工作流恢复详情页。
 - 写作模板：`templates/project-case-template.md`，用于后续添加新作品。
 
 ## 演示模式的浏览与修改
@@ -64,6 +64,7 @@ ai-portfolio-site/
     disease-rule-review.html
     doc-formatter.html
     n8n-workflow.html
+    knowledge-graph-rag.html
     workflow-recovery.html
   templates/
     project-case-template.md
