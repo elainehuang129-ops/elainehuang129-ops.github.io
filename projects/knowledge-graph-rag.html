@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="医学知识图谱 + 向量检索问答系统：基于本地 PDF 构建向量检索与知识图谱双路 RAG，融合语义召回与结构化关系，输出有据可依、可拒答的专业文档问答。">
+<title>医学知识图谱 + 向量检索问答系统 | Yilin</title>
+<link rel="stylesheet" href="../assets/styles.css?v=20260527c">
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+<a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+<nav class="site-nav" id="site-nav" aria-label="项目导航"><a href="../index.html#projects">全部作品</a><a class="nav-contact" href="../index.html#contact">联系</a></nav>
+</header>
+<main class="case-main">
+<a class="back-link" href="../index.html#projects">&lt;- 返回作品列表</a>
+<header class="case-hero">
+<p class="eyebrow">AI KNOWLEDGE / CASE 09</p>
+<h1>医学知识图谱 +<br>向量检索问答系统</h1>
+<p class="case-summary">面向专业文档的 RAG 问答系统：以本地 PDF 为输入，构建"向量检索 + 知识图谱"双路管道，融合语义召回与结构化关系推理，输出有据可依、可溯源、可拒答的答案。</p>
+<dl class="case-facts">
+<div><dt>角色</dt><dd>方案设计 / 全栈实现</dd></div>
+<div><dt>工具</dt><dd>Python / Neo4j / 阿里百炼 / DeepSeek</dd></div>
+<div><dt>状态</dt><dd>向量 + 图谱双库已跑通</dd></div>
+</dl>
+<div class="case-actions-inline">
+<a class="button primary" href="#evidence">查看验证证据</a>
+<a class="button secondary" href="#extension">查看可延伸方向</a>
+</div>
+</header>
+<div class="case-body">
+<nav class="case-nav" aria-label="页内导航">
+<a href="#challenge">问题</a>
+<a href="#solution">方案</a>
+<a href="#evidence">证明材料</a>
+<a href="#learning">沉淀</a>
+<a href="#extension">延伸</a>
+</nav>
+<article class="case-content">
+<section id="challenge">
+<h2>业务问题</h2>
+<p>专业文档（如医学共识、核保规则）信息密集、结构复杂，直接交给大模型问答会遇到两类问题：一是 PDF 原文噪音多（参考文献、页眉页脚、全角乱码）污染检索；二是纯向量检索只做"模糊语义匹配"，无法表达实体之间的精确关系，模型也容易脱离原文编造。需要一套既能语义召回、又能结构化推理、还能防幻觉的知识库方案。</p>
+</section>
+<section id="solution">
+<h2>我的方案</h2>
+<p>我设计了"文本清洗 → 双路构建 → 混合检索 → 严格生成"四段管道：先清洗 PDF 噪音，再分两路——一路用阿里百炼向量化存入 Chroma 做语义召回，一路用 DeepSeek 抽取实体关系写入 Neo4j 做结构化推理；问答时两路结果融合，交由 DeepSeek 基于检索内容作答，检索不到即明确拒答。</p>
+<div class="case-flow" aria-label="方案流程">
+<span>文本清洗</span><span>百炼向量化 + DeepSeek 抽取</span><span>Chroma + Neo4j 双库</span><span>混合检索</span><span>严格 RAG 生成</span>
+</div>
+</section>
+<section id="evidence">
+<h2>证明材料：可复跑的双库系统</h2>
+<p>以公开医学共识 PDF 为示例，系统完成清洗、双库构建与混合问答。以下为脱敏展示摘要。</p>
+<div class="proof-panel">
+<div class="proof-header">
+<div>
+<h3>知识图谱 + 向量问答 验证摘要</h3>
+<p>示例文档：幽门螺杆菌感染诊治共识（公开文献）</p>
+</div>
+<span class="proof-badge">可复跑演示</span>
+</div>
+<div class="evidence-metrics">
+<div class="evidence-metric"><strong>18</strong><span>清洗后干净正文块（从 100+ 噪音块）</span></div>
+<div class="evidence-metric"><strong>216</strong><span>知识图谱关系</span></div>
+<div class="evidence-metric"><strong>160+</strong><span>实体节点（疾病/药物/检查等）</span></div>
+<div class="evidence-metric"><strong>Top-1</strong><span>正确答案命中排名</span></div>
+</div>
+<table class="evidence-table">
+<thead><tr><th>演示问题</th><th>系统响应</th><th>依据</th><th>处理路径</th></tr></thead>
+<tbody>
+<tr><td>H.pylori 根除后多久复查</td><td>完成治疗至少 4 周后，首选 UBT</td><td>图谱 + 文档</td><td><span class="status-pill">正常作答</span></td></tr>
+<tr><td>哪些人需要根除 H.pylori</td><td>消化性溃疡 / 胃癌家族史 / 高风险个体</td><td>图谱 + 文档</td><td><span class="status-pill">正常作答</span></td></tr>
+<tr><td>四联疗法具体怎么用药</td><td>文档中未收录该内容</td><td>-</td><td><span class="status-pill review">正确拒答</span></td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">口径说明：示例文档为公开医学共识文献，不含敏感业务数据；上述结果用于证明"清洗 - 双路检索 - 严格生成"链路可运行，不构成医疗建议。</p>
+</section>
+<section id="learning">
+<h2>价值与沉淀</h2>
+<p>这个项目让我理清了向量检索与知识图谱的互补关系：向量负责"从大量文字里模糊地找到相关段落"，图谱负责"精确表达实体关系并做多跳推理与聚合"。在专业、高风险场景中，让模型只依据检索内容作答、并在无依据时如实拒答，与检索本身同样重要。清洗质量、检索区分度、拒答机制，共同决定了系统能否被信任。</p>
+</section>
+<section id="extension">
+<h2>还可以延伸到什么</h2>
+<div class="extension-grid">
+<article class="extension-card"><h3>核保风控规则库</h3><p>替换提取 schema（自定义实体/关系），把系统迁移到保险核保场景，图谱三元组直接接入规则引擎。</p></article>
+<article class="extension-card"><h3>重排精调</h3><p>在向量召回后接入重排模型，进一步提升相关段落的排序精度与复杂问题的鲁棒性。</p></article>
+<article class="extension-card"><h3>可溯源问答界面</h3><p>把图谱关系与文档片段的来源可视化，让每条结论都能一键回溯到原文与证据等级。</p></article>
+</div>
+</section>
+</article>
+</div>
+</main>
+<footer class="site-footer"><span>© <span id="year">2026</span> Yilin.</span><a href="../index.html">返回首页</a></footer>
+</body>
+</html>
