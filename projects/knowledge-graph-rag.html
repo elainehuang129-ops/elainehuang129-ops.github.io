@@ -428,7 +428,9 @@ main { position: relative; z-index: 2; }
 }
 
 .status-pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--paper);
   border: 1px solid var(--amber);
   color: var(--amber-deep);
@@ -436,6 +438,10 @@ main { position: relative; z-index: 2; }
   font-size: 11px;
   letter-spacing: 0.08em;
   padding: 4px 10px;
+  min-width: 148px;
+  min-height: 32px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .note {
