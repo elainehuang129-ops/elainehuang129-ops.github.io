@@ -5,89 +5,714 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="医学知识图谱 + 向量检索问答系统：基于本地 PDF 构建语义向量库与 Neo4j 知识图谱，探索医学指南文档的检索增强问答链路。">
 <title>医学知识图谱 + 向量检索问答系统 | Yilin</title>
-<link rel="stylesheet" href="../assets/styles.css?v=20260527c">
-<script src="../assets/site.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CASE STUDY — Monocle Editorial (match index.html)
+   ============================================================ */
+:root {
+  --paper:     #F2EFE7;
+  --paper-2:   #EBE6D8;
+  --paper-3:   #E3DECF;
+  --ink:       #1A1A1A;
+  --ink-soft:  #4A4A44;
+  --ink-mute:  #7A766A;
+  --amber:      #D28B42;
+  --amber-light:#E6A75C;
+  --amber-deep: #8A5F2E;
+  --amber-soft: #F6E7CF;
+  --amber-mute: #D9C5A3;
+  --brown:      #3D2B13;
+  --brown-deep: #2A1E0D;
+  --rule:      #C8C2B0;
+  --rule-soft: #D8D2C0;
+
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
+  --sans:  "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mono:  "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --max: 1240px;
+  --case-max: 1080px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+p, h1, h2, h3, h4, dl, ol, ul { margin: 0; }
+button { font: inherit; }
+
+::selection { background: var(--amber); color: var(--paper); }
+
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: radial-gradient(rgba(26,26,26,0.022) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+main { position: relative; z-index: 2; }
+
+/* ===== Header ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(242, 239, 231, 0.92);
+  backdrop-filter: blur(14px) saturate(1.05);
+  border-bottom: 1px solid var(--rule);
+}
+
+.header-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 14px;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.brand-mark {
+  width: 36px; height: 36px;
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.site-nav {
+  display: flex; align-items: center; gap: 28px;
+  font-size: 13px;
+}
+
+.site-nav a {
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  transition: color 200ms;
+}
+.site-nav a:hover { color: var(--ink); }
+
+.site-nav .nav-contact {
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  padding: 8px 18px;
+  letter-spacing: 0.06em;
+  transition: background 200ms, color 200ms;
+}
+.site-nav .nav-contact:hover { background: var(--ink); color: var(--paper); }
+
+/* ===== Case hero ===== */
+.case-main {
+  max-width: var(--case-max);
+  margin: 0 auto;
+  padding: 64px 32px 96px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+  margin-bottom: 56px;
+  transition: color 200ms, border-color 200ms, gap 250ms;
+}
+
+.back-link:hover {
+  color: var(--amber-deep);
+  border-color: var(--amber);
+  gap: 12px;
+}
+
+.case-hero {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 48px;
+  margin-bottom: 56px;
+}
+
+.case-no {
+  font-family: var(--serif);
+  font-size: 120px;
+  font-weight: 400;
+  line-height: 0.85;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--amber);
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  user-select: none;
+}
+
+.kicker {
+  display: inline-flex; align-items: center; gap: 12px;
+  color: var(--amber);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.kicker::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--amber);
+}
+
+.case-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(40px, 4.6vw, 56px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.case-summary {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  max-width: 720px;
+}
+
+.case-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 40px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.case-facts > div {
+  padding: 20px 24px;
+  border-right: 1px solid var(--rule);
+}
+
+.case-facts > div:last-child { border-right: 0; }
+
+.case-facts dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber-deep);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.case-facts dd {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.case-actions-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 22px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--ink);
+  transition: background 200ms, color 200ms, border-color 200ms;
+}
+
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.primary:hover { background: var(--amber); border-color: var(--amber); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+.btn .arrow { font-family: var(--mono); font-size: 12px; }
+
+/* ===== Case body ===== */
+.case-body {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 64px;
+}
+
+.case-nav {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+}
+
+.case-nav a {
+  display: block;
+  color: var(--ink-mute);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  transition: color 200ms, padding-left 250ms;
+}
+
+.case-nav a:hover {
+  color: var(--amber-deep);
+  padding-left: 8px;
+}
+
+.case-content section {
+  margin-bottom: 64px;
+}
+
+.case-content h2 {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+
+.case-content h2::before {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 48px; height: 2px;
+  background: var(--amber);
+}
+
+.case-content p, .case-content li {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.case-content p + p { margin-top: 14px; }
+
+.case-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.case-flow span {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 8px 14px;
+  position: relative;
+}
+
+.case-flow span:not(:last-child)::after {
+  content: "→";
+  color: var(--amber);
+  margin-left: 14px;
+  font-family: var(--mono);
+}
+
+/* ===== Proof panel ===== */
+.proof-panel {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  margin-top: 28px;
+  padding: 28px;
+}
+
+.proof-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.proof-header h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.proof-header p {
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-top: 4px;
+}
+
+.proof-badge {
+  background: var(--amber);
+  color: var(--brown-deep);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  flex-shrink: 0;
+}
+
+.evidence-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.evidence-table th,
+.evidence-table td {
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule);
+}
+
+.evidence-table thead th {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber-deep);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 12px;
+}
+
+.evidence-table tbody tr:last-child td { border-bottom: 0; }
+
+.evidence-table td:first-child {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--ink);
+  width: 22%;
+}
+
+.status-pill {
+  display: inline-block;
+  background: var(--paper);
+  border: 1px solid var(--amber);
+  color: var(--amber-deep);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+}
+
+.note {
+  background: var(--paper-2);
+  border-left: 3px solid var(--amber);
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin-top: 20px;
+  padding: 16px 20px;
+  font-style: italic;
+}
+
+/* ===== Extension ===== */
+.extension-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.extension-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--amber);
+  padding: 24px;
+  transition: background 220ms, border-color 220ms;
+}
+
+.extension-card:hover {
+  background: var(--paper-2);
+  border-color: var(--amber);
+  border-top-color: var(--amber);
+}
+
+.extension-card h3 {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.extension-card p {
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  background: var(--paper-2);
+  position: relative;
+  z-index: 2;
+}
+
+.footer-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footer-inner a {
+  border-bottom: 1px solid var(--ink-mute);
+  padding-bottom: 2px;
+  transition: color 200ms, border-color 200ms;
+}
+
+.footer-inner a:hover {
+  color: var(--amber-deep);
+  border-color: var(--amber);
+}
+
+/* ===== Fade-in ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.fade-in.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { transition: none; opacity: 1; transform: none; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1080px) {
+  .case-body { grid-template-columns: 1fr; gap: 40px; }
+  .case-nav { position: static; display: flex; gap: 4px; overflow-x: auto; }
+  .case-nav a { border-bottom: 0; border-right: 1px solid var(--rule-soft); padding: 8px 14px; white-space: nowrap; }
+  .case-nav a:hover { padding-left: 14px; color: var(--amber-deep); }
+  .extension-grid { grid-template-columns: 1fr; }
+  .case-facts { grid-template-columns: 1fr; }
+  .case-facts > div { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .case-facts > div:last-child { border-bottom: 0; }
+  .case-no { font-size: 72px; }
+}
+
+@media (max-width: 720px) {
+  .case-main { padding: 48px 24px 72px; }
+  .header-inner { padding: 0 24px; }
+  .case-hero h1 { font-size: 32px; }
+  .case-no { font-size: 56px; }
+  .proof-panel { padding: 20px; }
+  .proof-header { flex-direction: column; }
+  .evidence-table th, .evidence-table td { padding: 10px 8px; font-size: 12.5px; }
+}
+</style>
 </head>
 <body>
+
 <header class="site-header">
-<a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
-<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
-<nav class="site-nav" id="site-nav" aria-label="项目导航"><a href="../index.html#projects">全部作品</a><a class="nav-contact" href="../index.html#contact">联系</a></nav>
+  <div class="header-inner">
+    <a class="brand" href="../index.html"><span class="brand-mark">YL</span><span>Yilin / AI Portfolio</span></a>
+    <nav class="site-nav" aria-label="项目导航">
+      <a href="../index.html#works">全部作品</a>
+      <a class="nav-contact" href="../index.html#contact">联系</a>
+    </nav>
+  </div>
 </header>
+
 <main class="case-main">
-<a class="back-link" href="../index.html#projects">&lt;- 返回作品列表</a>
-<header class="case-hero">
-<p class="eyebrow">AI KNOWLEDGE / CASE 09</p>
-<h1>医学知识图谱 +<br>向量检索问答系统</h1>
-<p class="case-summary">面向医学指南文档的 RAG 问答系统：以本地 PDF 为输入，构建“语义向量库 + 知识图谱”双路知识库，用向量检索解决表述不一致的召回问题，用图谱表达疾病、检查、药物等实体关系。</p>
-<dl class="case-facts">
-<div><dt>角色</dt><dd>方案设计 / 全栈实现</dd></div>
-<div><dt>工具</dt><dd>Python / Neo4j / 阿里百炼 / DeepSeek</dd></div>
-<div><dt>状态</dt><dd>向量 + 图谱双库已跑通</dd></div>
-</dl>
-<div class="case-actions-inline">
-<a class="button primary" href="#evidence">查看验证证据</a>
-<a class="button secondary" href="https://github.com/elainehuang129-ops/MedicalRAG/" target="_blank" rel="noopener noreferrer">查看 GitHub 项目 ↗</a>
-</div>
-</header>
-<div class="case-body">
-<nav class="case-nav" aria-label="页内导航">
-<a href="#challenge">问题</a>
-<a href="#solution">方案</a>
-<a href="#evidence">证明材料</a>
-<a href="#learning">沉淀</a>
-<a href="#extension">延伸</a>
-</nav>
-<article class="case-content">
-<section id="challenge">
-<h2>业务问题</h2>
-<p>医学指南里存在大量术语别名、缩写、同义表达和上下文关系，直接用关键词搜索容易因为表述不完全一致而漏召回；同时，疾病、感染因素、检查方式、治疗药物之间常常不是孤立字段，而是存在明确的关联路径。普通表格很难表达这些关系，因此需要同时保留“能找到相关原文”的语义检索能力，以及“能看清实体关系”的图谱结构。</p>
-</section>
-<section id="solution">
-<h2>我的方案</h2>
-<p>我设计了“文本清洗 → 双路构建 → 混合检索 → 基于资料回答”的管道：先清洗 PDF 页眉页脚、参考文献等噪音，再用百炼 embedding 和 Chroma 构建语义向量库，用 DeepSeek 抽取实体关系并写入 Neo4j；问答时同时取回原文片段和图谱三元组，让回答既有资料来源，也能体现实体之间的关系。</p>
-<div class="case-flow" aria-label="方案流程">
-<span>文本清洗</span><span>百炼向量化 + DeepSeek 抽取</span><span>Chroma + Neo4j 双库</span><span>混合检索</span><span>基于资料回答</span>
-</div>
-</section>
-<section id="evidence">
-<h2>证明材料：可复跑的双库系统</h2>
-<p>项目代码包含从 PDF 读取、向量库构建、图谱入库到混合问答的脚本，可在本地配置 API Key 与 Neo4j 后复跑。以下展示的是链路能力，而非医疗建议或生产效果承诺。</p>
-<div class="proof-panel">
-<div class="proof-header">
-<div>
-<h3>知识图谱 + 向量问答链路</h3>
-<p>示例方向：公开医学指南 / 共识类 PDF 文档</p>
-</div>
-<span class="proof-badge">代码已公开</span>
-</div>
-<table class="evidence-table">
-<thead><tr><th>模块</th><th>解决的问题</th><th>对应脚本</th><th>输出</th></tr></thead>
-<tbody>
-<tr><td>PDF 清洗与分块</td><td>减少页眉页脚、参考文献、全角字符等噪音</td><td>vector_store.py</td><td><span class="status-pill">文本块</span></td></tr>
-<tr><td>语义向量库</td><td>缓解医学术语别名、相近表述导致的漏召回</td><td>vector_store.py / rebuild_vectors.py</td><td><span class="status-pill">Chroma 本地库</span></td></tr>
-<tr><td>知识图谱</td><td>存储疾病、症状、检查、药物等实体关系</td><td>pipeline.py / llm_provider.py</td><td><span class="status-pill">Neo4j 图谱</span></td></tr>
-<tr><td>混合问答</td><td>同时参考原文片段与图谱三元组回答问题</td><td>graph_qa_service.py</td><td><span class="status-pill">问答服务</span></td></tr>
-</tbody>
-</table>
-</div>
-<p class="note">口径说明：示例文档为公开医学资料，不含敏感业务数据；页面展示项目实现思路与代码链路，不构成医疗建议。</p>
-</section>
-<section id="learning">
-<h2>价值与沉淀</h2>
-<p>这个项目让我更清楚地理解了向量检索与知识图谱的分工：向量库负责在表述不完全一致时找回相关资料，知识图谱负责把资料中的实体关系结构化。对于医学这类专业文本，问答系统不只是“生成答案”，更重要的是让答案能回到原文依据，并保留关键实体之间的关系。</p>
-</section>
-<section id="extension">
-<h2>还可以延伸到什么</h2>
-<div class="extension-grid">
-<article class="extension-card"><h3>核保风控规则库</h3><p>替换提取 schema（自定义实体/关系），把系统迁移到保险核保场景，图谱三元组直接接入规则引擎。</p></article>
-<article class="extension-card"><h3>重排精调</h3><p>在向量召回后接入重排模型，进一步提升相关段落的排序精度与复杂问题的鲁棒性。</p></article>
-<article class="extension-card"><h3>可溯源问答界面</h3><p>把图谱关系与文档片段的来源可视化，让每条结论都能一键回溯到原文与证据等级。</p></article>
-</div>
-</section>
-</article>
-</div>
+
+  <a class="back-link" href="../index.html#works">← 返回作品列表</a>
+
+  <header class="case-hero fade-in">
+    <div class="case-no">01</div>
+    <p class="kicker">Feature 01 — 医疗 RAG / 知识图谱</p>
+    <h1>医学知识图谱 +<br>向量检索问答系统</h1>
+    <p class="case-summary">面向医学指南文档的 RAG 问答系统：以本地 PDF 为输入，构建"语义向量库 + 知识图谱"双路知识库，用向量检索解决表述不一致的召回问题，用图谱表达疾病、检查、药物等实体关系。</p>
+
+    <dl class="case-facts">
+      <div><dt>Role</dt><dd>方案设计 / 全栈实现</dd></div>
+      <div><dt>Stack</dt><dd>Python / Neo4j / 阿里百炼 / DeepSeek</dd></div>
+      <div><dt>Status</dt><dd>向量 + 图谱双库已跑通</dd></div>
+    </dl>
+
+    <div class="case-actions-inline">
+      <a class="btn primary" href="#evidence">查看验证证据 <span class="arrow">→</span></a>
+      <a class="btn ghost" href="https://github.com/elainehuang129-ops/MedicalRAG/" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </div>
+  </header>
+
+  <div class="case-body">
+
+    <nav class="case-nav" aria-label="页内导航">
+      <a href="#challenge">问题</a>
+      <a href="#solution">方案</a>
+      <a href="#evidence">证明材料</a>
+      <a href="#learning">沉淀</a>
+      <a href="#extension">延伸</a>
+    </nav>
+
+    <article class="case-content">
+
+      <section id="challenge" class="fade-in">
+        <h2>业务问题</h2>
+        <p>医学指南里存在大量术语别名、缩写、同义表达和上下文关系，直接用关键词搜索容易因为表述不完全一致而漏召回；同时，疾病、感染因素、检查方式、治疗药物之间常常不是孤立字段，而是存在明确的关联路径。普通表格很难表达这些关系，因此需要同时保留"能找到相关原文"的语义检索能力，以及"能看清实体关系"的图谱结构。</p>
+      </section>
+
+      <section id="solution" class="fade-in">
+        <h2>我的方案</h2>
+        <p>我设计了"文本清洗 → 双路构建 → 混合检索 → 基于资料回答"的管道：先清洗 PDF 页眉页脚、参考文献等噪音，再用百炼 embedding 和 Chroma 构建语义向量库，用 DeepSeek 抽取实体关系并写入 Neo4j；问答时同时取回原文片段和图谱三元组，让回答既有资料来源，也能体现实体之间的关系。</p>
+        <div class="case-flow" aria-label="方案流程">
+          <span>文本清洗</span>
+          <span>百炼向量化 + DeepSeek 抽取</span>
+          <span>Chroma + Neo4j 双库</span>
+          <span>混合检索</span>
+          <span>基于资料回答</span>
+        </div>
+      </section>
+
+      <section id="evidence" class="fade-in">
+        <h2>证明材料：可复跑的双库系统</h2>
+        <p>项目代码包含从 PDF 读取、向量库构建、图谱入库到混合问答的脚本，可在本地配置 API Key 与 Neo4j 后复跑。以下展示的是链路能力，而非医疗建议或生产效果承诺。</p>
+
+        <div class="proof-panel">
+          <div class="proof-header">
+            <div>
+              <h3>知识图谱 + 向量问答链路</h3>
+              <p>示例方向：公开医学指南 / 共识类 PDF 文档</p>
+            </div>
+            <span class="proof-badge">代码已公开</span>
+          </div>
+
+          <table class="evidence-table">
+            <thead>
+              <tr><th>模块</th><th>解决的问题</th><th>对应脚本</th><th>输出</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PDF 清洗与分块</td>
+                <td>减少页眉页脚、参考文献、全角字符等噪音</td>
+                <td><code style="font-family: var(--mono); font-size: 12px; color: var(--amber-deep);">vector_store.py</code></td>
+                <td><span class="status-pill">文本块</span></td>
+              </tr>
+              <tr>
+                <td>语义向量库</td>
+                <td>缓解医学术语别名、相近表述导致的漏召回</td>
+                <td><code style="font-family: var(--mono); font-size: 12px; color: var(--amber-deep);">vector_store.py / rebuild_vectors.py</code></td>
+                <td><span class="status-pill">Chroma 本地库</span></td>
+              </tr>
+              <tr>
+                <td>知识图谱</td>
+                <td>存储疾病、症状、检查、药物等实体关系</td>
+                <td><code style="font-family: var(--mono); font-size: 12px; color: var(--amber-deep);">pipeline.py / llm_provider.py</code></td>
+                <td><span class="status-pill">Neo4j 图谱</span></td>
+              </tr>
+              <tr>
+                <td>混合问答</td>
+                <td>同时参考原文片段与图谱三元组回答问题</td>
+                <td><code style="font-family: var(--mono); font-size: 12px; color: var(--amber-deep);">graph_qa_service.py</code></td>
+                <td><span class="status-pill">问答服务</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="note">口径说明：示例文档为公开医学资料，不含敏感业务数据；页面展示项目实现思路与代码链路，不构成医疗建议。</p>
+      </section>
+
+      <section id="learning" class="fade-in">
+        <h2>价值与沉淀</h2>
+        <p>这个项目让我更清楚地理解了向量检索与知识图谱的分工：向量库负责在表述不完全一致时找回相关资料，知识图谱负责把资料中的实体关系结构化。对于医学这类专业文本，问答系统不只是"生成答案"，更重要的是让答案能回到原文依据，并保留关键实体之间的关系。</p>
+      </section>
+
+      <section id="extension" class="fade-in">
+        <h2>还可以延伸到什么</h2>
+        <div class="extension-grid">
+          <article class="extension-card">
+            <h3>核保风控规则库</h3>
+            <p>替换提取 schema（自定义实体/关系），把系统迁移到保险核保场景，图谱三元组直接接入规则引擎。</p>
+          </article>
+          <article class="extension-card">
+            <h3>重排精调</h3>
+            <p>在向量召回后接入重排模型，进一步提升相关段落的排序精度与复杂问题的鲁棒性。</p>
+          </article>
+          <article class="extension-card">
+            <h3>可溯源问答界面</h3>
+            <p>把图谱关系与文档片段的来源可视化，让每条结论都能一键回溯到原文与证据等级。</p>
+          </article>
+        </div>
+      </section>
+
+    </article>
+  </div>
+
 </main>
-<footer class="site-footer"><span>© <span id="year">2026</span> Yilin.</span><a href="../index.html">返回首页</a></footer>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© <span id="year">2026</span> Yilin — AI Portfolio</span>
+    <a href="../index.html">返回首页</a>
+  </div>
+</footer>
+
+<script>
+// Year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Fade-in
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+</script>
+
 </body>
 </html>
