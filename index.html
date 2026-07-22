@@ -1,631 +1,1370 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Yilin 的 AI 作品集：自动化工作流、Prompt 工程、知识库构建与黑客松应用，记录 AI 落地实践的真实历程。">
-  <title>Yilin | AI 作品集</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260527d">
-  <style>
-    /* ===== v2 Extension Styles ===== */
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Yilin 的 AI 作品集：自动化工作流、Prompt 工程、知识库构建与 RAG 应用，记录 AI 落地实践的真实历程。">
+<title>Yilin | AI 作品集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   YILIN · AI PORTFOLIO — Monocle Editorial Direction (v0.2)
+   Ground: #F2EFE7 / Ink: #1A1A1A / Accent: Amber #D28B42 / Feature: Brown #3D2B13
+   Radius: 0 / Shadow: none / Motion: minimal
+   ============================================================ */
 
-    /* New tag tones */
-    .tag.teal  { background: #dff0ee; color: #1a6b5a; }
-    .tag.orange { background: #fef3e2; color: #b87020; }
+:root {
+  --paper:     #F2EFE7;
+  --paper-2:   #EBE6D8;
+  --paper-3:   #E3DECF;
+  --ink:       #1A1A1A;
+  --ink-soft:  #4A4A44;
+  --ink-mute:  #7A766A;
+  --amber:      #D28B42;
+  --amber-light:#E6A75C;
+  --amber-deep: #8A5F2E;
+  --amber-soft: #F6E7CF;
+  --amber-mute: #D9C5A3;
+  --brown:      #3D2B13;
+  --brown-deep: #2A1E0D;
+  --rule:      #C8C2B0;
+  --rule-soft: #D8D2C0;
 
-    /* ===== Automation Pipeline Section ===== */
-    .auto-pipeline-section { padding: 91px 0 0; }
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
+  --sans:  "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mono:  "IBM Plex Mono", ui-monospace, Consolas, monospace;
 
-    .pipeline-board {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      margin-top: 44px;
-      overflow: hidden;
-      padding: 36px 40px 28px;
-    }
+  --max: 1240px;
+}
 
-    .pipeline-board-label {
-      color: var(--muted);
-      font-size: 11.5px;
-      font-weight: bold;
-      letter-spacing: 0.18em;
-      margin-bottom: 28px;
-      text-transform: uppercase;
-    }
+* { box-sizing: border-box; }
 
-    .pipeline-steps {
-      align-items: stretch;
-      display: flex;
-      gap: 0;
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
+html { scroll-behavior: smooth; overflow-x: clip; }
 
-    .ps-node {
-      background: #f0ece2;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      flex-shrink: 0;
-      min-width: 128px;
-      padding: 18px 16px;
-      text-align: center;
-    }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
 
-    .ps-node.dark {
-      background: #143f35;
-      border-color: #143f35;
-      color: #f8f4ec;
-    }
+a { color: inherit; text-decoration: none; }
+p, h1, h2, h3, h4, dl, ol, ul { margin: 0; }
+img { display: block; max-width: 100%; }
+button { font: inherit; }
 
-    .ps-node.split {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-width: 152px;
-    }
+::selection { background: var(--amber); color: var(--paper); }
 
-    .ps-sub {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      color: var(--ink);
-      font-size: 12px;
-      padding: 8px 12px;
-      text-align: center;
-    }
+/* Paper grain */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: radial-gradient(rgba(26,26,26,0.022) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
 
-    .ps-time {
-      color: #2db787;
-      display: block;
-      font-size: 10px;
-      letter-spacing: 0.07em;
-      margin-bottom: 6px;
-    }
+main { position: relative; z-index: 2; }
 
-    .ps-label {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(242, 239, 231, 0.92);
+  backdrop-filter: blur(14px) saturate(1.05);
+  border-bottom: 1px solid var(--rule);
+}
 
-    .ps-desc {
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.45;
-    }
+.header-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
 
-    .dark .ps-desc { color: #b8ccc3; }
+.brand {
+  display: flex; align-items: center; gap: 14px;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+}
 
-    .ps-arrow {
-      align-items: center;
-      color: var(--amber);
-      display: flex;
-      flex-shrink: 0;
-      font-size: 17px;
-      padding: 0 10px;
-    }
+.brand-mark {
+  width: 36px; height: 36px;
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 700;
+}
 
-    .pipeline-board-footer {
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12.5px;
-      margin-top: 26px;
-      padding-top: 15px;
-    }
+.site-nav {
+  display: flex; align-items: center; gap: 32px;
+  font-size: 13px;
+}
 
-    .pipeline-board-footer a { color: var(--green); }
+.site-nav a {
+  color: var(--ink-soft);
+  position: relative;
+  padding: 4px 0;
+  letter-spacing: 0.04em;
+  transition: color 200ms;
+}
 
-    /* ===== Prompt Engineering Section ===== */
-    .prompt-section { padding: 91px 0 0; }
+.site-nav a::after {
+  content: "";
+  position: absolute; left: 0; right: 100%; bottom: 0;
+  height: 1px;
+  background: var(--amber);
+  transition: right 250ms ease;
+}
 
-    .prompt-grid {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 8px;
-    }
+.site-nav a:hover { color: var(--ink); }
+.site-nav a:hover::after { right: 0; }
 
-    .prompt-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      padding: 26px;
-    }
+.site-nav .nav-contact {
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  padding: 8px 18px;
+  letter-spacing: 0.06em;
+  transition: background 200ms, color 200ms;
+}
+.site-nav .nav-contact::after { display: none; }
+.site-nav .nav-contact:hover { background: var(--ink); color: var(--paper); }
 
-    .prompt-name {
-      font-family: Georgia, "Noto Serif SC", serif;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 1.35;
-      margin-bottom: 6px;
-    }
+.menu-toggle { display: none; }
 
-    .prompt-context {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 18px;
-    }
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 96px 32px 80px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  align-items: end;
+}
 
-    .prompt-block {
-      background: #f0ece2;
-      border-left: 3px solid var(--green);
-      border-radius: 0 6px 6px 0;
-      flex: 1;
-      font-family: ui-monospace, Consolas, 'Cascadia Code', monospace;
-      font-size: 11.5px;
-      line-height: 1.78;
-      padding: 16px 42px 16px 18px;
-      position: relative;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
+.kicker {
+  display: inline-flex; align-items: center; gap: 12px;
+  color: var(--amber);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
 
-    .btn-copy {
-      background: transparent;
-      border: 1px solid rgba(18,84,67,0.28);
-      border-radius: 5px;
-      color: var(--green);
-      cursor: pointer;
-      font: 11px inherit;
-      padding: 3px 9px;
-      position: absolute;
-      right: 8px;
-      top: 8px;
-      transition: background .15s, color .15s;
-    }
+.kicker::before {
+  content: "";
+  width: 32px; height: 1px;
+  background: var(--amber);
+}
 
-    .btn-copy:hover, .btn-copy.ok {
-      background: var(--green);
-      color: #fff;
-    }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(56px, 6.4vw, 88px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  margin-bottom: 32px;
+}
 
-    .prompt-techniques {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 14px;
-    }
+.hero h1 em {
+  font-style: normal;
+  color: var(--amber);
+}
 
-    .ptag {
-      background: #ece7db;
-      border-radius: 4px;
-      color: var(--muted);
-      font-size: 11px;
-      padding: 3px 8px;
-    }
+.hero-dek {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  max-width: 560px;
+  margin-bottom: 44px;
+}
 
-    /* ===== Hackathon Section ===== */
-    .hackathon-section { padding: 91px 0 0; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
 
-    .hackathon-grid {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1fr 1fr;
-      margin-top: 44px;
-    }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 26px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--ink);
+  transition: background 200ms, color 200ms, border-color 200ms;
+}
 
-    .hackathon-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      display: flex;
-      gap: 22px;
-      padding: 30px;
-    }
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.primary:hover { background: var(--amber); border-color: var(--amber); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); }
 
-    .hk-icon {
-      align-items: center;
-      background: #fef3e2;
-      border-radius: 10px;
-      display: flex;
-      flex-shrink: 0;
-      font-size: 28px;
-      height: 56px;
-      justify-content: center;
-      width: 56px;
-    }
+.btn .arrow { font-family: var(--mono); font-size: 13px; }
 
-    .hk-content h3 {
-      font-family: Georgia, "Noto Serif SC", serif;
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
+.hero-panel {
+  border-left: 1px solid var(--rule);
+  padding-left: 40px;
+  display: flex; flex-direction: column; gap: 32px;
+}
 
-    .hk-content p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
+.panel-block-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
 
-    .hk-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.panel-meta dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.panel-meta dd {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+.panel-meta dd:last-child { margin-bottom: 0; }
 
-    .hk-badge {
-      background: #fef3e2;
-      border: 1px solid #f0d49a;
-      border-radius: 4px;
-      color: var(--amber);
-      font-size: 11px;
-      padding: 3px 9px;
-    }
+.panel-signal {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+}
+.panel-signal::before {
+  content: "";
+  width: 8px; height: 8px;
+  background: var(--amber);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(210, 139, 66, 0.18);
+}
 
-    .hk-outcome {
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 16px;
-      padding-top: 13px;
-    }
+/* ============================================================
+   TICKER
+   ============================================================ */
+.ticker { border-bottom: 1px solid var(--rule); overflow: hidden; }
 
-    /* wider capability grid */
-    .capability-grid-4 {
-      display: grid;
-      gap: 22px;
-      grid-template-columns: repeat(4, 1fr);
-    }
+.ticker-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: flex; gap: 48px; align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ticker-inner::-webkit-scrollbar { display: none; }
 
-    .capability-grid-4 article {
-      border-top: 1px solid var(--line);
-      padding: 27px 22px 0 0;
-    }
+.ticker-inner span { display: inline-flex; align-items: center; gap: 48px; }
+.ticker-inner i { color: var(--amber); font-style: normal; }
 
-    /* Responsive */
-    @media (max-width: 1100px) {
-      .capability-grid-4 { grid-template-columns: repeat(2, 1fr); }
-    }
+/* ============================================================
+   SECTION SHELL
+   ============================================================ */
+.section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 128px 32px 0;
+}
 
-    @media (max-width: 920px) {
-      .prompt-grid  { grid-template-columns: 1fr; }
-      .hackathon-grid { grid-template-columns: 1fr; }
-      .pipeline-steps { flex-direction: column; }
-      .ps-arrow { justify-content: center; padding: 6px 0; transform: rotate(90deg); }
-    }
+.section-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: 48px;
+  margin-bottom: 64px;
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--ink);
+}
 
-    @media (max-width: 620px) {
-      .hackathon-card { flex-direction: column; }
-    }
+.section-no {
+  font-family: var(--serif);
+  font-size: 120px;
+  font-weight: 400;
+  line-height: 0.85;
+  color: var(--paper-3);
+  -webkit-text-stroke: 1px var(--rule);
+  letter-spacing: -0.04em;
+  user-select: none;
+}
 
-    /* Back-to-top button */
-    #backToTop {
-      align-items: center;
-      background: var(--green);
-      border: none;
-      border-radius: 50%;
-      bottom: 32px;
-      box-shadow: 0 4px 16px rgba(18,84,67,.28);
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      font-size: 20px;
-      height: 44px;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      position: fixed;
-      right: 28px;
-      transition: opacity .25s, transform .25s;
-      transform: translateY(10px);
-      width: 44px;
-      z-index: 900;
-    }
+.section-title h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
 
-    #backToTop.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
+.section-title p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  max-width: 560px;
+  line-height: 1.7;
+}
 
-    #backToTop:hover { filter: brightness(1.12); }
+/* ============================================================
+   PROJECT GRID — 卡片布局（沿用原版骨架，重做视觉）
+   ============================================================ */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
 
-    /* Nav scroll active state */
-    .site-nav a.nav-active {
-      color: var(--green);
-      font-weight: 700;
-    }
-  </style>
-  <script src="assets/site.js" defer></script>
+.project-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  min-height: 340px;
+  position: relative;
+  transition: background 220ms, border-color 220ms, transform 220ms;
+}
+
+.project-card:hover {
+  background: var(--paper-2);
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 32px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.card-cat {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.card-no {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--ink-mute);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.project-card h3 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin-bottom: 14px;
+}
+
+.project-card p {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.card-outcome {
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  line-height: 1.65;
+  padding-top: 16px;
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 3px;
+  align-self: flex-start;
+  transition: color 200ms, border-color 200ms, gap 250ms;
+}
+
+.project-card:hover .card-link {
+  color: var(--amber);
+  border-color: var(--amber);
+  gap: 12px;
+}
+
+/* ============================================================
+   FEATURE CARDS — 两张旗舰大卡
+   ============================================================ */
+.project-card.feature {
+  grid-column: span 3;
+  background: var(--brown);
+  color: var(--amber-soft);
+  border-color: var(--brown);
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 56px;
+  min-height: 0;
+  padding: 48px;
+  align-items: center;
+}
+
+.project-card.feature:hover {
+  background: var(--brown);
+  border-color: var(--brown);
+  transform: none;
+}
+
+.project-card.feature .card-meta {
+  color: rgba(246, 231, 207, 0.55);
+  margin-bottom: 24px;
+  grid-column: 1;
+}
+
+.project-card.feature .card-cat { color: var(--amber-light); }
+
+.project-card.feature .card-no {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(230, 167, 92, 0.55);
+  font-size: 88px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.feature-copy { grid-column: 1; display: flex; flex-direction: column; }
+
+.project-card.feature h3 {
+  color: var(--amber-soft);
+  font-size: clamp(32px, 3.2vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+
+.project-card.feature > div > p,
+.project-card.feature .feature-copy > p {
+  color: rgba(246, 231, 207, 0.78);
+  font-size: 14.5px;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.feature-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 28px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(230, 167, 92, 0.22);
+  border-bottom: 1px solid rgba(230, 167, 92, 0.22);
+  margin-bottom: 28px;
+}
+
+.feature-facts dt {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: rgba(230, 167, 92, 0.65);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.feature-facts dd {
+  margin: 0;
+  font-size: 13px;
+  color: var(--amber-soft);
+  line-height: 1.5;
+}
+
+.feature-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.feature-actions .btn {
+  padding: 13px 22px;
+  font-size: 13px;
+}
+
+.feature-actions .btn.primary {
+  background: var(--amber-soft);
+  color: var(--brown-deep);
+  border-color: var(--amber-soft);
+}
+
+.feature-actions .btn.primary:hover {
+  background: var(--amber-light);
+  border-color: var(--amber-light);
+  color: var(--brown-deep);
+}
+
+.feature-actions .btn.ghost {
+  background: transparent;
+  color: var(--amber-soft);
+  border-color: rgba(246, 231, 207, 0.42);
+}
+
+.feature-actions .btn.ghost:hover {
+  background: rgba(246, 231, 207, 0.12);
+  border-color: var(--amber-soft);
+}
+
+.feature-visual {
+  grid-column: 2;
+  align-self: stretch;
+  position: relative;
+  background: var(--paper-2);
+  overflow: hidden;
+  min-height: 320px;
+  display: flex;
+}
+
+.feature-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
+
+.feature-visual.rag-visual {
+  background: var(--brown-deep);
+}
+
+.feature-visual svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.visual-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(242, 239, 231, 0.96);
+  border-top: 1px solid var(--rule);
+  padding: 10px 18px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-mute);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+/* Feature 卡片内嵌结构：把 card-meta + feature-copy 包在一起 */
+.project-card.feature .feature-body {
+  display: contents;
+}
+
+/* ============================================================
+   PIPELINE — dark strip
+   ============================================================ */
+.focus {
+  background: var(--ink);
+  color: var(--paper);
+  margin-top: 128px;
+}
+
+.focus .section { padding-top: 96px; padding-bottom: 96px; }
+.focus .section-head { border-bottom-color: var(--paper); }
+.focus .section-no { color: transparent; -webkit-text-stroke-color: rgba(242,239,231,0.18); }
+.focus .section-title h2 { color: var(--paper); }
+.focus .section-title p { color: rgba(242,239,231,0.6); }
+.focus .kicker { color: var(--amber-soft); }
+.focus .kicker::before { background: var(--amber-soft); }
+
+.pipeline-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid rgba(242,239,231,0.2);
+  border-bottom: 1px solid rgba(242,239,231,0.2);
+}
+
+.pipeline-step {
+  padding: 40px 28px;
+  border-right: 1px solid rgba(242,239,231,0.2);
+}
+
+.pipeline-step:last-child { border-right: 0; }
+
+.pipeline-step .step-no {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber-soft);
+  letter-spacing: 0.24em;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.pipeline-step h4 {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--paper);
+}
+
+.pipeline-step p {
+  font-size: 13px;
+  color: rgba(242,239,231,0.6);
+  line-height: 1.65;
+}
+
+.pipeline-foot {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(242,239,231,0.2);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(242,239,231,0.5);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   COLUMNS — Prompt engineering
+   ============================================================ */
+.columns-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+}
+
+.column-block {
+  border-top: 2px solid var(--ink);
+  padding-top: 24px;
+}
+
+.column-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.column-block h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.column-context {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.prompt-block {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--amber);
+  padding: 20px 22px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.78;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+  word-break: break-word;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.btn-copy {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.btn-copy:hover, .btn-copy.ok {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.tag-chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+}
+
+/* ============================================================
+   INTERLUDE — pull quote
+   ============================================================ */
+.interlude {
+  max-width: 880px;
+  margin: 128px auto 0;
+  padding: 80px 32px;
+  text-align: center;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.interlude blockquote {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.8vw, 34px);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+
+.interlude blockquote em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.interlude cite {
+  display: block;
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ============================================================
+   DISPATCH — hackathon
+   ============================================================ */
+.dispatch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.dispatch-item {
+  border-top: 2px solid var(--ink);
+  padding-top: 28px;
+}
+
+.dispatch-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex; justify-content: space-between;
+}
+
+.dispatch-item h3 {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.dispatch-item p {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+  margin-bottom: 22px;
+}
+
+.dispatch-outcome {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink);
+  border-left: 2px solid var(--amber);
+  padding-left: 16px;
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 80px;
+  padding-bottom: 96px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.about-bio h2 {
+  font-family: var(--serif);
+  font-size: clamp(40px, 4.4vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+
+.about-bio .lead {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.about-bio p {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.85;
+  max-width: 580px;
+}
+
+.colophon {
+  border-left: 1px solid var(--rule);
+  padding-left: 40px;
+}
+
+.colophon h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.colophon ul {
+  list-style: none;
+  padding: 0;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+.colophon li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 14px;
+}
+
+.colophon li:last-child { border-bottom: 0; }
+.colophon li::before {
+  content: "—";
+  color: var(--amber);
+  font-family: var(--mono);
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact {
+  padding: 128px 32px;
+  text-align: center;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.contact h2 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.15;
+  margin: 24px 0 32px;
+}
+
+.contact p {
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin-bottom: 40px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+
+.footer-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   BACK TO TOP
+   ============================================================ */
+#backToTop {
+  position: fixed;
+  bottom: 32px; right: 32px;
+  width: 44px; height: 44px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms, background 200ms;
+  z-index: 100;
+}
+
+#backToTop.visible { opacity: 1; pointer-events: auto; }
+#backToTop:hover { background: var(--amber); }
+
+/* ============================================================
+   SCROLL FADE-IN
+   ============================================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.fade-in.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { transition: none; opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1080px) {
+  .hero { grid-template-columns: 1fr; gap: 48px; padding: 72px 32px 64px; }
+  .hero-panel { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 32px; }
+  .project-grid { grid-template-columns: 1fr 1fr; }
+  .project-card.feature { grid-column: span 2; grid-template-columns: 1fr; padding: 40px; gap: 32px; }
+  .feature-visual { grid-column: 1; min-height: 260px; }
+  .project-card.feature .card-no { font-size: 64px; }
+  .pipeline-steps { grid-template-columns: 1fr; }
+  .pipeline-step { border-right: 0; border-bottom: 1px solid rgba(242,239,231,0.2); }
+  .pipeline-step:last-child { border-bottom: 0; }
+  .columns-grid { grid-template-columns: 1fr; }
+  .dispatch-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .colophon { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 32px; }
+  .section-head { grid-template-columns: 1fr; gap: 16px; }
+  .section-no { font-size: 72px; }
+}
+
+@media (max-width: 720px) {
+  .site-nav { display: none; }
+  .menu-toggle {
+    display: inline-flex;
+    background: transparent;
+    border: 1px solid var(--ink);
+    padding: 8px 14px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .hero h1 { font-size: 44px; }
+  .section { padding: 80px 24px 0; }
+  .project-grid { grid-template-columns: 1fr; }
+  .project-card.feature { grid-column: span 1; padding: 32px 24px; }
+  .hero, .contact { padding-left: 24px; padding-right: 24px; }
+  .header-inner { padding: 0 24px; }
+  .footer-inner { flex-direction: column; gap: 8px; }
+}
+</style>
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="header-inner">
     <a class="brand" href="#top" aria-label="Yilin AI 作品集首页">
       <span class="brand-mark">YL</span>
       <span>Yilin / AI Portfolio</span>
     </a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
-    <nav class="site-nav" id="site-nav" aria-label="主导航">
-      <a href="#projects">作品</a>
-      <a href="#roadmap">延伸方向</a>
-      <a href="#automation">工具链</a>
+    <button class="menu-toggle" type="button" aria-expanded="false">菜单</button>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="#works">作品</a>
+      <a href="#pipeline">工具链</a>
       <a href="#prompts">Prompt</a>
-      <a href="#about">关于我</a>
-      <a href="presentation.html">演示模式</a>
+      <a href="#dispatch">黑客松</a>
+      <a href="#about">关于</a>
       <a class="nav-contact" href="#contact">联系</a>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <main id="top">
+<main id="top">
 
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">AI PRACTICE / AUTOMATION & PRODUCT</p>
-        <h1>把 AI 变成<br><span>能验证的业务成果</span></h1>
-        <p class="hero-lead">从每日自动化工作流、Prompt 工程到黑客松应用，我探索如何让 AI 稳健落地于真实工作与个人项目。</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#projects">查看代表作品</a>
-          <a class="button secondary" href="presentation.html">打开可编辑演示</a>
-        </div>
+  <!-- ================= HERO ================= -->
+  <section class="hero fade-in">
+    <div>
+      <p class="kicker">Issue 01 — AI Practice</p>
+      <h1>把 AI 变成<br><em>能验证的</em>业务成果</h1>
+      <p class="hero-dek">从医学知识图谱与向量检索，到每日自动化工作流、Prompt 工程与黑客松应用 —— 我探索如何让 AI 稳健落地于真实工作。</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#works">查看代表作品 <span class="arrow">→</span></a>
+        <a class="btn ghost" href="#about">关于我</a>
       </div>
-      <div class="hero-panel" aria-label="能力概览">
-        <div class="signal">
-          <span class="signal-dot"></span>
-          <span>Portfolio v2.0 / 持续更新中</span>
-        </div>
-        <div class="pipeline">
-          <div class="pipeline-row active">
-            <span>01</span>
-            <strong>定义问题与目标</strong>
-            <small>context</small>
+    </div>
+
+    <aside class="hero-panel">
+      <div>
+        <p class="panel-block-label">Status</p>
+        <span class="panel-signal">Portfolio · 持续更新中</span>
+      </div>
+      <dl class="panel-meta">
+        <dt>Focus</dt>
+        <dd>RAG 系统 / 知识图谱 / 自动化工作流</dd>
+        <dt>Toolkit</dt>
+        <dd>Python · Neo4j · Chroma · Codex · n8n</dd>
+        <dt>Approach</dt>
+        <dd>可验证 / 可复核 / 可迭代</dd>
+      </dl>
+    </aside>
+  </section>
+
+  <!-- ================= TICKER ================= -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span>医学知识图谱 <i>/</i> 向量检索 <i>/</i> 自动化工作流 <i>/</i> Prompt 工程 <i>/</i> 风控知识库 <i>/</i> 数据分析 <i>/</i> 黑客松应用 <i>/</i> 人机协同</span>
+    </div>
+  </div>
+
+  <!-- ================= WORKS ================= -->
+  <section class="section" id="works">
+    <header class="section-head">
+      <div class="section-no">01</div>
+      <div class="section-title">
+        <p class="kicker">Selected Work</p>
+        <h2>代表作品</h2>
+        <p>两项旗舰项目特写，七项延伸探索。内容已做公开展示处理。</p>
+      </div>
+    </header>
+
+    <div class="project-grid">
+
+      <!-- FEATURE 01 — 医学 RAG（最突出） -->
+      <article class="project-card feature fade-in">
+        <div class="feature-copy">
+          <div class="card-meta">
+            <span class="card-cat">Feature — 医疗 RAG / 知识图谱</span>
+            <span class="card-no">01</span>
           </div>
-          <div class="pipeline-row active">
-            <span>02</span>
-            <strong>设计 Prompt 与流程</strong>
-            <small>engineer</small>
-          </div>
-          <div class="pipeline-row active">
-            <span>03</span>
-            <strong>自动化执行与输出</strong>
-            <small>automate</small>
-          </div>
-          <div class="pipeline-row active">
-            <span>04</span>
-            <strong>复核验证与迭代</strong>
-            <small>validate</small>
+          <h3>医学知识图谱 +<br>向量检索问答系统</h3>
+          <p>针对医学指南中术语别名、表述不一致和实体关系复杂的问题，搭建语义向量库与 Neo4j 知识图谱双路知识库，用向量召回处理表述差异，用图谱表达实体关系。</p>
+          <dl class="feature-facts">
+            <div><dt>Stack</dt><dd>Python / Neo4j / Chroma</dd></div>
+            <div><dt>Model</dt><dd>阿里百炼 / DeepSeek</dd></div>
+            <div><dt>Approach</dt><dd>双库混合检索</dd></div>
+            <div><dt>Status</dt><dd>向量 + 图谱已跑通</dd></div>
+          </dl>
+          <div class="feature-actions">
+            <a class="btn primary" href="projects/knowledge-graph-rag.html">查看案例 <span class="arrow">→</span></a>
+            <a class="btn ghost" href="https://github.com/elainehuang129-ops/MedicalRAG/tree/main/RAG%2BNeo4j" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
           </div>
         </div>
-        <dl class="metrics">
-          <div><dt>10+</dt><dd>实践案例</dd></div>
-          <div><dt>Codex + n8n</dt><dd>工具链</dd></div>
-          <div><dt>Eazo</dt><dd>黑客松参赛</dd></div>
-        </dl>
-      </div>
-    </section>
 
-    <!-- ===== INTRO STRIP ===== -->
-    <section class="intro-strip" aria-label="关注方向">
-      <span>自动化工作流</span>
-      <span>Prompt 工程</span>
-      <span>风控知识库</span>
-      <span>数据分析</span>
-      <span>黑客松应用</span>
-      <span>人机协同</span>
-    </section>
-
-    <!-- ===== PROJECTS ===== -->
-    <section class="section projects" id="projects">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">SELECTED WORK</p>
-          <h2>代表作品</h2>
-        </div>
-        <p>涵盖自动化工作流、工作提效、知识库构建、医疗 RAG 与数据工具，内容已做公开展示处理。</p>
-      </div>
-
-      <div class="filters" aria-label="作品筛选">
-        <button class="filter active" type="button" data-filter="all">全部</button>
-        <button class="filter" type="button" data-filter="automation">自动化</button>
-        <button class="filter" type="button" data-filter="productivity">工作提效</button>
-        <button class="filter" type="button" data-filter="risk">知识管理</button>
-        <button class="filter" type="button" data-filter="data">数据工具</button>
-      </div>
-
-      <div class="project-grid">
-
-        <!-- 01 AI 日报自动化 ← 主推 -->
-        <article class="project-card feature has-preview" data-category="automation">
-          <div class="feature-copy">
-            <div class="card-meta"><span class="tag">自动化 / 真实产品</span><span>01</span></div>
-            <h3>AI 日报自动化系统</h3>
-            <p>基于 Codex 定时任务，每天 9:00 自动搜集 AI 资讯、结构化整理后发布到日报网站，并将结果推送至 Gmail 邮箱。</p>
-            <div class="card-outcome">成果：自动任务已配置为每日运行；工具链：Codex → 网站 Webhook → Gmail</div>
-            <div class="card-actions">
-              <a href="projects/ai-daily-report.html">查看案例 →</a>
-              <a class="live-link" href="https://report-weaver-daily.lovable.app/" target="_blank" rel="noopener noreferrer">访问真实日报 ↗</a>
-            </div>
+        <div class="feature-visual rag-visual" aria-hidden="true">
+          <svg viewBox="0 0 480 360" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <radialGradient id="ragBg" cx="50%" cy="40%" r="80%">
+                <stop offset="0%" stop-color="#3A2A12"/>
+                <stop offset="100%" stop-color="#221806"/>
+              </radialGradient>
+              <filter id="ragGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <rect width="480" height="360" fill="url(#ragBg)"/>
+            <g stroke="#C89A5B" stroke-opacity="0.35" stroke-width="1" fill="none">
+              <path d="M240 170 L120 80"/><path d="M240 170 L360 78"/>
+              <path d="M240 170 L106 245"/><path d="M240 170 L368 250"/>
+              <path d="M120 80 L60 200"/><path d="M360 78 L424 196"/>
+              <path d="M106 245 L212 305"/><path d="M368 250 L262 305"/>
+              <path d="M120 80 L360 78" stroke-dasharray="3 4" stroke-opacity="0.22"/>
+              <path d="M106 245 L368 250" stroke-dasharray="3 4" stroke-opacity="0.22"/>
+              <path d="M60 200 L106 245"/><path d="M424 196 L368 250"/>
+              <path d="M212 305 L262 305"/>
+            </g>
+            <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#D8B98A" fill-opacity="0.68" letter-spacing="0.06em">
+              <text x="164" y="116">表现为</text>
+              <text x="306" y="116">需检查</text>
+              <text x="146" y="218">常用药物</text>
+              <text x="312" y="220">禁忌症</text>
+              <text x="240" y="70">并发症</text>
+              <text x="240" y="252">相关科室</text>
+            </g>
+            <g filter="url(#ragGlow)">
+              <circle cx="240" cy="170" r="28" fill="#D28B42"/>
+              <circle cx="240" cy="170" r="28" fill="none" stroke="#F2EFE7" stroke-opacity="0.5" stroke-width="1"/>
+            </g>
+            <text x="240" y="166" text-anchor="middle" font-family="Noto Serif SC, serif" font-size="13" font-weight="700" fill="#F2EFE7">糖尿病</text>
+            <text x="240" y="181" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#F2EFE7" fill-opacity="0.65" letter-spacing="0.1em">DISEASE</text>
+            <g font-family="Noto Sans SC, sans-serif" font-size="11" fill="#F2EFE7">
+              <circle cx="120" cy="80"  r="14" fill="#A3763D"/><text x="120" y="84" text-anchor="middle">症状</text>
+              <circle cx="360" cy="78"  r="14" fill="#A3763D"/><text x="360" y="82" text-anchor="middle">检查</text>
+              <circle cx="106" cy="245" r="14" fill="#8A5F2E"/><text x="106" y="249" text-anchor="middle">药物</text>
+              <circle cx="368" cy="250" r="14" fill="#8A5F2E"/><text x="368" y="254" text-anchor="middle">禁忌</text>
+              <circle cx="60"  cy="200" r="10" fill="#5D4123"/><text x="60"  y="204" text-anchor="middle" font-size="9">别名</text>
+              <circle cx="424" cy="196" r="10" fill="#5D4123"/><text x="424" y="200" text-anchor="middle" font-size="9">指标</text>
+              <circle cx="212" cy="305" r="10" fill="#5D4123"/><text x="212" y="309" text-anchor="middle" font-size="9">科室</text>
+              <circle cx="262" cy="305" r="10" fill="#5D4123"/><text x="262" y="309" text-anchor="middle" font-size="9">人群</text>
+            </g>
+            <g transform="translate(16 16)">
+              <rect width="132" height="26" fill="none" stroke="#C89A5B" stroke-opacity="0.35" stroke-width="1"/>
+              <circle cx="14" cy="13" r="3" fill="#D28B42"/>
+              <text x="26" y="17" font-family="IBM Plex Mono, monospace" font-size="10" fill="#F2EFE7" fill-opacity="0.85" letter-spacing="0.1em">Neo4j + Chroma</text>
+            </g>
+          </svg>
+          <div class="visual-caption">
+            <span>Fig. 01 — 双路知识库示意</span>
+            <span>Neo4j × Chroma</span>
           </div>
-          <a class="project-preview" href="projects/ai-daily-report.html" aria-label="查看 AI 日报自动化系统案例">
-            <img src="assets/images/ai-daily-report-home.png" alt="知识日报网站公开首页截图，显示 AI 日报最新一期入口" loading="lazy">
-            <span>查看产品实景</span>
-          </a>
-        </article>
-
-        <!-- 02 版本化知识库 -->
-        <article class="project-card" data-category="risk">
-          <div class="card-meta"><span class="tag">知识管理</span><span>02</span></div>
-          <h3>版本化知识库与 AI 复核闭环</h3>
-          <p>将 Excel 维护的规则知识资产转化为具备版本追踪、AI 建议与人工审核链路的结构化流程。</p>
-          <div class="card-outcome">证明材料：脱敏 Demo 已输出 20 个样本、15 项版本差异与验证报告</div>
-          <a href="projects/risk-knowledge-base.html">查看案例 →</a>
-        </article>
-
-        <!-- 03 人审信息平台 -->
-        <article class="project-card" data-category="productivity">
-          <div class="card-meta"><span class="tag teal">工作提效</span><span>03</span></div>
-          <h3>人审信息平台加速</h3>
-          <p>用 Codex 联网搜索能力辅助项目类型快速分类，加快人工审核前的信息预处理速度。</p>
-          <div class="card-outcome">展示：可筛选的脱敏审核台 Demo，呈现需复核与可确认的分流路径</div>
-          <a href="projects/human-review-platform.html">体验演示 →</a>
-        </article>
-
-        <!-- 04 药品知识库 -->
-        <article class="project-card" data-category="productivity">
-          <div class="card-meta"><span class="tag teal">工作提效</span><span>04</span></div>
-          <h3>药品知识库构建</h3>
-          <p>通过 Codex 联网搜索批量收集药品说明书关键字段，结构化提取后助力构建药品规则底座。</p>
-          <div class="card-outcome">展示：适应症采集、官方证据记录与“多适应症不直推”验证流程</div>
-          <a href="projects/drug-knowledge-base.html">查看验证流程 →</a>
-        </article>
-
-        <!-- 05 疾病规则复核 -->
-        <article class="project-card" data-category="productivity">
-          <div class="card-meta"><span class="tag teal">工作提效</span><span>05</span></div>
-          <h3>疾病推断规则 AI 复核</h3>
-          <p>使用 Codex 联网搜索对历史疾病推断规则进行准确性核查，识别过时或存疑规则并推动更新。</p>
-          <div class="card-outcome">展示：可保留、转人工、禁止直推的规则审计判定框架</div>
-          <a href="projects/disease-rule-review.html">查看审计方法 →</a>
-        </article>
-
-        <!-- 06 Word 文档格式 -->
-        <article class="project-card" data-category="productivity">
-          <div class="card-meta"><span class="tag teal">工作提效</span><span>06</span></div>
-          <h3>Word 文档格式规范化</h3>
-          <p>利用 Codex 文件处理能力批量统一 Word 文档格式规范，减少重复排版与人工校对工作。</p>
-          <div class="card-outcome">展示：格式校验清单、交付检查路径与批量处理扩展思路</div>
-          <a href="projects/doc-formatter.html">查看规范校验 →</a>
-        </article>
-
-        <!-- 07 SQL 练习器 -->
-        <article class="project-card" data-category="data">
-          <div class="card-meta"><span class="tag blue">数据工具</span><span>07</span></div>
-          <h3>交互式 SQL 指标练习器</h3>
-          <p>无需后端，在浏览器中运行真实 SQL 查询，围绕互联网常用业务指标设计可操作练习场景。</p>
-          <div class="card-outcome">可验证 Demo：5 道指标题 · 3 张模拟业务表 · 浏览器内真实运行</div>
-          <a href="projects/sql-trainer.html">进入练习器 →</a>
-        </article>
-
-        <!-- 08 n8n 工作流 -->
-        <article class="project-card" data-category="automation">
-          <div class="card-meta"><span class="tag purple">自动化探索</span><span>08</span></div>
-          <h3>n8n 工作流探索</h3>
-          <p>排查 n8n 接入 DeepSeek 时的网络、节点配置与数据存储问题，将流程恢复到可稳定执行状态。</p>
-          <div class="card-outcome">展示：连接、配置、存储到结果输出的脱敏恢复验证路径</div>
-          <a href="projects/n8n-workflow.html">查看恢复验证 →</a>
-        </article>
-
-        <!-- 09 医学 RAG + 知识图谱 -->
-        <article class="project-card" data-category="risk">
-          <div class="card-meta"><span class="tag orange">医疗 RAG</span><span>09</span></div>
-          <h3>医学知识图谱 + 向量检索问答系统</h3>
-          <p>针对医学指南中术语别名、表述不一致和实体关系复杂的问题，搭建语义向量库与 Neo4j 知识图谱双路知识库。</p>
-          <div class="card-outcome">展示：PDF 清洗分块、语义召回、实体关系入库与图谱 + 原文片段融合问答链路</div>
-          <a href="projects/knowledge-graph-rag.html">查看案例 →</a>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- ===== PRODUCT EXTENSIONS ===== -->
-    <section class="section roadmap" id="roadmap">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">FROM CASE TO PRODUCT</p>
-          <h2>这些项目还可以改造成什么</h2>
         </div>
-        <p>从单次辅助任务，进一步升级为可审计、可运营、可持续迭代的 AI 产品能力。</p>
-      </div>
-      <div class="extension-grid">
-        <article class="extension-card">
-          <h3>人审 Copilot 工作台</h3>
-          <p>将项目检索、AI 建议、证据引用、审核意见与复核升级整合成队列化产品。</p>
-        </article>
-        <article class="extension-card">
-          <h3>可审计药品规则库</h3>
-          <p>以官方证据、核验日期和版本记录支撑规则发布、回滚与监管变更响应。</p>
-        </article>
-        <article class="extension-card">
-          <h3>风险质量监控中心</h3>
-          <p>持续追踪直通率、人工复核率、问题召回与规则失效率，辅助阈值调整。</p>
-        </article>
-        <article class="extension-card">
-          <h3>监管证据巡检服务</h3>
-          <p>定期核对适应症更新、来源失效和规则变更，为发布与下线任务提供提醒。</p>
-        </article>
-        <article class="extension-card">
-          <h3>文档交付质检平台</h3>
-          <p>把格式模板、隐私检查和批量导出组合为可复用的报告交付能力。</p>
-        </article>
-        <article class="extension-card">
-          <h3>数据技能训练产品</h3>
-          <p>将 SQL 互动练习扩展为带指标口径、自动评测和岗位任务的数据训练环境。</p>
-        </article>
-      </div>
-    </section>
+      </article>
 
-    <!-- ===== AUTOMATION PIPELINE ===== -->
-    <section class="section auto-pipeline-section" id="automation">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">AUTOMATION SHOWCASE</p>
+      <!-- FEATURE 02 — AI 日报 -->
+      <article class="project-card feature fade-in">
+        <div class="feature-copy">
+          <div class="card-meta">
+            <span class="card-cat">Feature — 自动化 / 真实产品</span>
+            <span class="card-no">02</span>
+          </div>
+          <h3>AI 日报<br>自动化系统</h3>
+          <p>基于 Codex 定时任务，每天 9:00 自动搜集 AI 资讯、结构化整理后发布到日报网站，并将结果推送至 Gmail 邮箱。</p>
+          <dl class="feature-facts">
+            <div><dt>Trigger</dt><dd>Codex 定时任务</dd></div>
+            <div><dt>Pipeline</dt><dd>搜索 → 整理 → 发布</dd></div>
+            <div><dt>Output</dt><dd>网站 + Gmail 双路</dd></div>
+            <div><dt>Status</dt><dd>每日自动运行中</dd></div>
+          </dl>
+          <div class="feature-actions">
+            <a class="btn primary" href="projects/ai-daily-report.html">查看案例 <span class="arrow">→</span></a>
+            <a class="btn ghost" href="https://report-weaver-daily.lovable.app/" target="_blank" rel="noopener noreferrer">访问日报 ↗</a>
+          </div>
+        </div>
+
+        <a class="feature-visual" href="projects/ai-daily-report.html" aria-label="查看 AI 日报自动化系统案例">
+          <img src="assets/images/ai-daily-report-home.png" alt="知识日报网站公开首页截图" loading="lazy">
+          <div class="visual-caption">
+            <span>Fig. 02 — 真实日报网站首页</span>
+            <span>Live Product</span>
+          </div>
+        </a>
+      </article>
+
+      <!-- 03 版本化知识库 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">知识管理</span>
+          <span class="card-no">03</span>
+        </div>
+        <h3>版本化知识库与 AI 复核闭环</h3>
+        <p>将 Excel 维护的规则知识资产转化为具备版本追踪、AI 建议与人工审核链路的结构化流程。</p>
+        <div class="card-outcome">脱敏 Demo 已输出 20 个样本、15 项版本差异与验证报告</div>
+        <a class="card-link" href="projects/risk-knowledge-base.html">查看案例 →</a>
+      </article>
+
+      <!-- 04 人审信息平台 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">工作提效</span>
+          <span class="card-no">04</span>
+        </div>
+        <h3>人审信息平台加速</h3>
+        <p>用 Codex 联网搜索能力辅助项目类型快速分类，加快人工审核前的信息预处理速度。</p>
+        <div class="card-outcome">可筛选的脱敏审核台 Demo，呈现需复核与可确认的分流路径</div>
+        <a class="card-link" href="projects/human-review-platform.html">体验演示 →</a>
+      </article>
+
+      <!-- 05 药品知识库 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">工作提效</span>
+          <span class="card-no">05</span>
+        </div>
+        <h3>药品知识库构建</h3>
+        <p>通过 Codex 联网搜索批量收集药品说明书关键字段，结构化提取后助力构建药品规则底座。</p>
+        <div class="card-outcome">适应症采集、官方证据记录与"多适应症不直推"验证流程</div>
+        <a class="card-link" href="projects/drug-knowledge-base.html">查看验证 →</a>
+      </article>
+
+      <!-- 06 疾病规则复核 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">工作提效</span>
+          <span class="card-no">06</span>
+        </div>
+        <h3>疾病推断规则 AI 复核</h3>
+        <p>使用 Codex 联网搜索对历史疾病推断规则进行准确性核查，识别过时或存疑规则并推动更新。</p>
+        <div class="card-outcome">可保留、转人工、禁止直推的规则审计判定框架</div>
+        <a class="card-link" href="projects/disease-rule-review.html">审计方法 →</a>
+      </article>
+
+      <!-- 07 Word 文档格式 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">工作提效</span>
+          <span class="card-no">07</span>
+        </div>
+        <h3>Word 文档格式规范化</h3>
+        <p>利用 Codex 文件处理能力批量统一 Word 文档格式规范，减少重复排版与人工校对工作。</p>
+        <div class="card-outcome">格式校验清单、交付检查路径与批量处理扩展思路</div>
+        <a class="card-link" href="projects/doc-formatter.html">规范校验 →</a>
+      </article>
+
+      <!-- 08 SQL 练习器 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">数据工具</span>
+          <span class="card-no">08</span>
+        </div>
+        <h3>交互式 SQL 指标练习器</h3>
+        <p>无需后端，在浏览器中运行真实 SQL 查询，围绕互联网常用业务指标设计可操作练习场景。</p>
+        <div class="card-outcome">5 道指标题 · 3 张模拟业务表 · 浏览器内真实运行</div>
+        <a class="card-link" href="projects/sql-trainer.html">进入练习 →</a>
+      </article>
+
+      <!-- 09 n8n 工作流 -->
+      <article class="project-card fade-in">
+        <div class="card-meta">
+          <span class="card-cat">自动化探索</span>
+          <span class="card-no">09</span>
+        </div>
+        <h3>n8n 工作流探索</h3>
+        <p>排查 n8n 接入 DeepSeek 时的网络、节点配置与数据存储问题，将流程恢复到可稳定执行状态。</p>
+        <div class="card-outcome">连接、配置、存储到结果输出的脱敏恢复验证路径</div>
+        <a class="card-link" href="projects/n8n-workflow.html">恢复验证 →</a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= PIPELINE ================= -->
+  <section class="focus" id="pipeline">
+    <div class="section">
+      <header class="section-head">
+        <div class="section-no">02</div>
+        <div class="section-title">
+          <p class="kicker">Automation Showcase</p>
           <h2>AI 日报自动化工具链</h2>
+          <p>一条从定时触发到网站同步与邮件送达的自动化流水线。</p>
         </div>
-        <p>一条从定时触发到网站同步与邮件送达的自动化流水线。</p>
-      </div>
+      </header>
 
-      <div class="pipeline-board">
-        <p class="pipeline-board-label">每日执行流程 · Daily Automated Pipeline</p>
-        <div class="pipeline-steps">
-
-          <div class="ps-node dark">
-            <span class="ps-time">⏰ 09:00 · 每日</span>
-            <div class="ps-label">Codex 定时任务</div>
-            <div class="ps-desc">自动触发<br>无需人工操作</div>
-          </div>
-          <div class="ps-arrow">→</div>
-
-          <div class="ps-node">
-            <div class="ps-label">联网搜索</div>
-            <div class="ps-desc">收集当日<br>AI 领域关键动态</div>
-          </div>
-          <div class="ps-arrow">→</div>
-
-          <div class="ps-node">
-            <div class="ps-label">AI 整理生成</div>
-            <div class="ps-desc">结构化处理<br>输出标准日报格式</div>
-          </div>
-          <div class="ps-arrow">→</div>
-
-          <div class="ps-node split">
-            <div class="ps-label" style="text-align:center;margin-bottom:4px;">多路输出</div>
-            <div class="ps-sub">📧 Gmail 邮件推送</div>
-            <div class="ps-sub">🌐 网站 Webhook 发布</div>
-          </div>
-          <div class="ps-arrow">→</div>
-
-          <div class="ps-node dark">
-            <div class="ps-label">同步结果</div>
-            <div class="ps-desc">记录发布状态<br>返回访问链接</div>
-          </div>
-
+      <div class="pipeline-steps">
+        <div class="pipeline-step">
+          <span class="step-no">Step 01</span>
+          <h4>Codex 定时任务</h4>
+          <p>每日 09:00 自动触发，无需人工操作</p>
         </div>
-        <div class="pipeline-board-footer">
-          技术栈：<strong>Codex Automation</strong> · <strong>Website Webhook</strong> · <strong>Gmail</strong>&emsp;
-          <span style="font-size:11px;">公开访问地址以每日任务同步返回结果为准</span>
+        <div class="pipeline-step">
+          <span class="step-no">Step 02</span>
+          <h4>联网搜索</h4>
+          <p>收集当日 AI 领域关键动态</p>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-no">Step 03</span>
+          <h4>AI 整理生成</h4>
+          <p>结构化处理，输出标准日报格式</p>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-no">Step 04</span>
+          <h4>多路输出</h4>
+          <p>Gmail 邮件推送 + 网站 Webhook 发布</p>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-no">Step 05</span>
+          <h4>同步结果</h4>
+          <p>记录发布状态，返回访问链接</p>
         </div>
       </div>
-    </section>
 
-    <!-- ===== PROMPT ENGINEERING ===== -->
-    <section class="section prompt-section" id="prompts">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">PROMPT ENGINEERING</p>
-          <h2>Prompt 工程实践</h2>
-        </div>
+      <p class="pipeline-foot">Stack — Codex Automation · Website Webhook · Gmail</p>
+    </div>
+  </section>
+
+  <!-- ================= PROMPTS ================= -->
+  <section class="section" id="prompts">
+    <header class="section-head">
+      <div class="section-no">03</div>
+      <div class="section-title">
+        <p class="kicker">Prompt Engineering</p>
+        <h2>Prompt 工程实践</h2>
         <p>不同业务场景下的结构化 Prompt 设计，展示角色设定、输出约束与人机协同的方法。</p>
       </div>
+    </header>
 
-      <div class="prompt-grid">
-
-        <!-- Prompt 1: Daily report -->
-        <div class="prompt-card">
-          <div class="prompt-name">AI 资讯日报收集</div>
-          <div class="prompt-context">应用于 Codex 定时任务，每日 9:00 自动执行</div>
-          <div class="prompt-block">你是一位 AI 资讯编辑。
+    <div class="columns-grid">
+      <div class="column-block fade-in">
+        <p class="column-kicker">Prompt 01</p>
+        <h3>AI 资讯日报收集</h3>
+        <p class="column-context">应用于 Codex 定时任务，每日 9:00 自动执行</p>
+        <div class="prompt-block">你是一位 AI 资讯编辑。
 请搜索今天 {date} 的 AI 领域重要动态。
 
 重点关注：
@@ -638,18 +1377,18 @@
 2. 按重要程度排序
 3. 简洁中文描述，≤100 字/条
 4. 最终输出 Markdown 格式<button class="btn-copy">复制</button></div>
-          <div class="prompt-techniques">
-            <span class="ptag">角色设定</span>
-            <span class="ptag">输出格式约束</span>
-            <span class="ptag">结构化指令</span>
-          </div>
+        <div class="tag-row">
+          <span class="tag-chip">角色设定</span>
+          <span class="tag-chip">输出格式约束</span>
+          <span class="tag-chip">结构化指令</span>
         </div>
+      </div>
 
-        <!-- Prompt 2: Drug info -->
-        <div class="prompt-card">
-          <div class="prompt-name">药品说明书结构化提取</div>
-          <div class="prompt-context">用于批量构建药品知识库规则底座</div>
-          <div class="prompt-block">请搜索以下药品的说明书信息：
+      <div class="column-block fade-in">
+        <p class="column-kicker">Prompt 02</p>
+        <h3>药品说明书结构化提取</h3>
+        <p class="column-context">用于批量构建药品知识库规则底座</p>
+        <div class="prompt-block">请搜索以下药品的说明书信息：
 药品名称：{drug_name}
 
 提取字段：
@@ -663,18 +1402,18 @@
 
 输出：标准 JSON 格式
 便于导入知识库系统<button class="btn-copy">复制</button></div>
-          <div class="prompt-techniques">
-            <span class="ptag">来源优先级</span>
-            <span class="ptag">结构化输出</span>
-            <span class="ptag">变量占位符</span>
-          </div>
+        <div class="tag-row">
+          <span class="tag-chip">来源优先级</span>
+          <span class="tag-chip">结构化输出</span>
+          <span class="tag-chip">变量占位符</span>
         </div>
+      </div>
 
-        <!-- Prompt 3: Project classification -->
-        <div class="prompt-card">
-          <div class="prompt-name">项目类型分类辅助</div>
-          <div class="prompt-context">用于人审信息平台的前置分类加速</div>
-          <div class="prompt-block">你是项目分类专家。
+      <div class="column-block fade-in">
+        <p class="column-kicker">Prompt 03</p>
+        <h3>项目类型分类辅助</h3>
+        <p class="column-context">用于人审信息平台的前置分类加速</p>
+        <div class="prompt-block">你是项目分类专家。
 请对以下项目进行分类：
 
 项目名称：{name}
@@ -686,130 +1425,64 @@
 2. 置信度（高 / 中 / 低）
 3. 低置信度标记「需人工复核」
 4. 简述分类依据（≤50 字）<button class="btn-copy">复制</button></div>
-          <div class="prompt-techniques">
-            <span class="ptag">置信度分级</span>
-            <span class="ptag">人机协同设计</span>
-            <span class="ptag">可解释输出</span>
-          </div>
+        <div class="tag-row">
+          <span class="tag-chip">置信度分级</span>
+          <span class="tag-chip">人机协同设计</span>
+          <span class="tag-chip">可解释输出</span>
         </div>
-
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ===== HACKATHON ===== -->
-    <section class="section hackathon-section" id="hackathon">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">HACKATHON / EAZO</p>
-          <h2>黑客松应用开发</h2>
-        </div>
+  <!-- ================= INTERLUDE ================= -->
+  <div class="interlude fade-in">
+    <blockquote>
+      AI 不是效果展示的捷径。<br>
+      我关注的是：输出能被<em>理解</em>、被<em>复核</em>、被<em>指标验证</em>。
+    </blockquote>
+    <cite>How I Work — Yilin</cite>
+  </div>
+
+  <!-- ================= DISPATCH ================= -->
+  <section class="section" id="dispatch">
+    <header class="section-head">
+      <div class="section-no">04</div>
+      <div class="section-title">
+        <p class="kicker">Hackathon / Eazo</p>
+        <h2>黑客松应用开发</h2>
         <p>参加 Eazo 黑客松期间，快速从想法到上线发布的两款 AI 应用。</p>
       </div>
+    </header>
 
-      <div class="hackathon-grid">
+    <div class="dispatch-grid">
+      <article class="dispatch-item fade-in">
+        <p class="dispatch-tag"><span>App 01</span><span>Eazo</span></p>
+        <h3>冰箱管家</h3>
+        <p>AI 驱动的食材管理应用，帮助用户追踪冰箱库存、发出临期提醒并推荐菜谱，减少食物浪费。</p>
+        <p class="dispatch-outcome">从想法到上线，在黑客松期间完成完整产品周期，已发布于 Eazo 平台。</p>
+      </article>
 
-        <div class="hackathon-card">
-          <div class="hk-icon">🧊</div>
-          <div class="hk-content">
-            <h3>冰箱管家</h3>
-            <p>AI 驱动的食材管理应用，帮助用户追踪冰箱库存、发出临期提醒并推荐菜谱，减少食物浪费。</p>
-            <div class="hk-tags">
-              <span class="hk-badge">Eazo 平台</span>
-              <span class="hk-badge">AI 应用</span>
-              <span class="hk-badge">黑客松</span>
-            </div>
-            <div class="hk-outcome">从想法到上线，在黑客松期间完成完整产品周期，已发布于 Eazo 平台</div>
-          </div>
-        </div>
+      <article class="dispatch-item fade-in">
+        <p class="dispatch-tag"><span>App 02</span><span>Eazo</span></p>
+        <h3>看房记录本</h3>
+        <p>AI 辅助的看房工具，帮助用户结构化记录每套房源信息，智能整理并对比购房决策要素。</p>
+        <p class="dispatch-outcome">解决看房信息零散记录的真实痛点，已发布于 Eazo 平台。</p>
+      </article>
+    </div>
+  </section>
 
-        <div class="hackathon-card">
-          <div class="hk-icon">🏠</div>
-          <div class="hk-content">
-            <h3>看房记录本</h3>
-            <p>AI 辅助的看房工具，帮助用户结构化记录每套房源信息，智能整理并对比购房决策要素。</p>
-            <div class="hk-tags">
-              <span class="hk-badge">Eazo 平台</span>
-              <span class="hk-badge">AI 应用</span>
-              <span class="hk-badge">黑客松</span>
-            </div>
-            <div class="hk-outcome">解决看房信息零散记录的真实痛点，已发布于 Eazo 平台</div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===== CAPABILITIES ===== -->
-    <section class="section capabilities" id="capabilities">
-      <div class="section-heading compact">
-        <div>
-          <p class="eyebrow">CAPABILITIES</p>
-          <h2>我能解决的问题</h2>
-        </div>
-      </div>
-      <div class="capability-grid-4">
-        <article>
-          <span class="number">01</span>
-          <h3>AI 自动化工作流</h3>
-          <p>设计定时触发、多平台联动的 AI 工作流，让重复性任务全自动执行并可持续维护。</p>
-        </article>
-        <article>
-          <span class="number">02</span>
-          <h3>Prompt 工程</h3>
-          <p>为不同业务场景设计结构化 Prompt，平衡输出质量、格式规范与可控性边界。</p>
-        </article>
-        <article>
-          <span class="number">03</span>
-          <h3>知识库与数据分析</h3>
-          <p>将非结构化信息转化为可检索、可验证的知识资产，结合 SQL 构建可追溯的指标体系。</p>
-        </article>
-        <article>
-          <span class="number">04</span>
-          <h3>人机协同设计</h3>
-          <p>在 AI 与人工审核之间设计合理边界，确保高风险决策有人工复核留痕与回滚机制。</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ===== METHOD ===== -->
-    <section class="section method" id="method">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">HOW I WORK</p>
-          <h2>从想法到可验证结果</h2>
-        </div>
-        <p>AI 不是效果展示的捷径。我关注的是：输出能被理解、被复核、被指标验证。</p>
-      </div>
-      <ol class="timeline">
-        <li>
-          <span>01</span>
-          <div><h3>定义问题</h3><p>厘清使用场景、风险边界与成功标准。</p></div>
-        </li>
-        <li>
-          <span>02</span>
-          <div><h3>设计 Prompt 与流程</h3><p>构建提示词、数据节点和人工审核机制。</p></div>
-        </li>
-        <li>
-          <span>03</span>
-          <div><h3>自动化执行</h3><p>打通工具链路，让 AI 处理重复性高的部分。</p></div>
-        </li>
-        <li>
-          <span>04</span>
-          <div><h3>验证与沉淀</h3><p>通过样本、指标检验有效性，形成可复用文档。</p></div>
-        </li>
-      </ol>
-    </section>
-
-    <!-- ===== ABOUT ===== -->
-    <section class="section about" id="about">
-      <div class="about-card">
-        <p class="eyebrow">ABOUT ME</p>
+  <!-- ================= ABOUT ================= -->
+  <section class="section" id="about">
+    <div class="about-grid">
+      <div class="about-bio fade-in">
+        <p class="kicker">About — Colophon</p>
         <h2>Yilin</h2>
-        <p class="about-lead">我是一名 AI 应用实践者，专注于将 AI 工具落地到真实工作流程中，追求可验证、可迭代的结果。</p>
-        <p>当前探索聚焦于：Codex 自动化工作流、Prompt 工程设计、保险风控知识管理与 SQL 数据分析。同时参与 Eazo 黑客松，探索 AI 在日常生活场景中的应用。网站展示内容已做脱敏处理，不涉及敏感业务数据。</p>
+        <p class="lead">一名 AI 应用实践者，专注于将 AI 工具落地到真实工作流程中，追求可验证、可迭代的结果。</p>
+        <p>当前探索聚焦于：Codex 自动化工作流、RAG 系统与知识图谱、Prompt 工程设计、保险风控知识管理与 SQL 数据分析。同时参与 Eazo 黑客松，探索 AI 在日常生活场景中的应用。网站展示内容已做脱敏处理，不涉及敏感业务数据。</p>
       </div>
-      <aside class="principles" aria-label="作品公开原则">
-        <h3>公开原则</h3>
+
+      <aside class="colophon fade-in">
+        <h4>公开原则</h4>
         <ul>
           <li>不展示客户、个人或内部敏感数据</li>
           <li>演示指标清晰标注为样本或模拟结果</li>
@@ -817,97 +1490,81 @@
           <li>工具链涉及的 API Key 与凭证均不公开</li>
         </ul>
       </aside>
-    </section>
+    </div>
+  </section>
 
-    <!-- ===== CONTACT ===== -->
-    <section class="contact" id="contact">
-      <div>
-        <p class="eyebrow">CONTACT</p>
-        <h2>一起聊聊 AI 如何解决实际问题</h2>
-      </div>
-      <div class="contact-box">
-        <p>欢迎交流 AI 应用落地、Prompt 工程或自动化工作流话题。</p>
-        <a class="button primary" href="mailto:13733768756@163.com">发邮件联系</a>
-      </div>
-    </section>
+  <!-- ================= CONTACT ================= -->
+  <section class="contact fade-in" id="contact">
+    <p class="kicker" style="justify-content: center; display: inline-flex;">Correspondence</p>
+    <h2>一起聊聊 AI<br>如何解决实际问题</h2>
+    <p>欢迎交流 AI 应用落地、RAG 系统、Prompt 工程或自动化工作流话题。</p>
+    <a class="btn primary" href="mailto:13733768756@163.com" style="display: inline-flex;">发邮件联系 <span class="arrow">→</span></a>
+  </section>
 
-  </main>
+</main>
 
-  <button id="backToTop" aria-label="返回顶部" title="返回顶部">↑</button>
+<button id="backToTop" aria-label="返回顶部" title="返回顶部">↑</button>
 
-  <footer class="site-footer">
-    <span>© <span id="year">2026</span> Yilin. AI Portfolio.</span>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© <span id="year">2026</span> Yilin — AI Portfolio</span>
+    <span>Set in Noto Serif SC / Noto Sans SC</span>
     <span>Built for GitHub Pages</span>
-  </footer>
+  </div>
+</footer>
 
-  <script>
-    // Copy button for prompts
-    document.querySelectorAll('.btn-copy').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const block = this.closest('.prompt-block');
-        // Extract only text nodes (exclude button text)
-        let text = '';
-        block.childNodes.forEach(n => {
-          if (n.nodeType === Node.TEXT_NODE) text += n.textContent;
-        });
-        text = text.trim();
-        navigator.clipboard.writeText(text).then(() => {
-          this.textContent = '已复制 ✓';
-          this.classList.add('ok');
-          setTimeout(() => {
-            this.textContent = '复制';
-            this.classList.remove('ok');
-          }, 2000);
-        }).catch(() => {
-          // Fallback
-          const ta = document.createElement('textarea');
-          ta.value = text;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-          this.textContent = '已复制 ✓';
-          this.classList.add('ok');
-          setTimeout(() => {
-            this.textContent = '复制';
-            this.classList.remove('ok');
-          }, 2000);
-        });
-      });
+<script>
+// Copy button
+document.querySelectorAll('.btn-copy').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const block = this.closest('.prompt-block');
+    let text = '';
+    block.childNodes.forEach(n => {
+      if (n.nodeType === Node.TEXT_NODE) text += n.textContent;
     });
+    text = text.trim();
+    const done = () => {
+      this.textContent = '已复制';
+      this.classList.add('ok');
+      setTimeout(() => { this.textContent = '复制'; this.classList.remove('ok'); }, 2000);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      done();
+    }
+  });
+});
 
-    // Back-to-top button
-    const btt = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      btt.classList.toggle('visible', window.scrollY > 400);
-    }, { passive: true });
-    btt.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+// Back to top
+const btt = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  btt.classList.toggle('visible', window.scrollY > 500);
+}, { passive: true });
+btt.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
-    // Nav scroll active state
-    (function () {
-      const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
-      const sections = Array.from(navLinks)
-        .map(a => document.querySelector(a.getAttribute('href')))
-        .filter(Boolean);
+// Scroll fade-in
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 
-      function updateNav() {
-        const scrollY = window.scrollY + 120;
-        let active = null;
-        sections.forEach(sec => {
-          if (sec.offsetTop <= scrollY) active = sec;
-        });
-        navLinks.forEach(a => {
-          const target = document.querySelector(a.getAttribute('href'));
-          a.classList.toggle('nav-active', target === active);
-        });
-      }
-
-      window.addEventListener('scroll', updateNav, { passive: true });
-      updateNav();
-    })();
-  </script>
+// Year
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>

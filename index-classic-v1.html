@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Yilin 的 AI 作品集：自动化工作流、Prompt 工程、知识库构建与黑客松应用，记录 AI 落地实践的真实历程。">
+  <title>Yilin | AI 作品集</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20260527d">
+  <style>
+    /* ===== v2 Extension Styles ===== */
+
+    /* New tag tones */
+    .tag.teal  { background: #dff0ee; color: #1a6b5a; }
+    .tag.orange { background: #fef3e2; color: #b87020; }
+
+    /* ===== Automation Pipeline Section ===== */
+    .auto-pipeline-section { padding: 91px 0 0; }
+
+    .pipeline-board {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin-top: 44px;
+      overflow: hidden;
+      padding: 36px 40px 28px;
+    }
+
+    .pipeline-board-label {
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: bold;
+      letter-spacing: 0.18em;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+    }
+
+    .pipeline-steps {
+      align-items: stretch;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .ps-node {
+      background: #f0ece2;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      flex-shrink: 0;
+      min-width: 128px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .ps-node.dark {
+      background: #143f35;
+      border-color: #143f35;
+      color: #f8f4ec;
+    }
+
+    .ps-node.split {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 152px;
+    }
+
+    .ps-sub {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      font-size: 12px;
+      padding: 8px 12px;
+      text-align: center;
+    }
+
+    .ps-time {
+      color: #2db787;
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      margin-bottom: 6px;
+    }
+
+    .ps-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .ps-desc {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .dark .ps-desc { color: #b8ccc3; }
+
+    .ps-arrow {
+      align-items: center;
+      color: var(--amber);
+      display: flex;
+      flex-shrink: 0;
+      font-size: 17px;
+      padding: 0 10px;
+    }
+
+    .pipeline-board-footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12.5px;
+      margin-top: 26px;
+      padding-top: 15px;
+    }
+
+    .pipeline-board-footer a { color: var(--green); }
+
+    /* ===== Prompt Engineering Section ===== */
+    .prompt-section { padding: 91px 0 0; }
+
+    .prompt-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 8px;
+    }
+
+    .prompt-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 26px;
+    }
+
+    .prompt-name {
+      font-family: Georgia, "Noto Serif SC", serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .prompt-context {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .prompt-block {
+      background: #f0ece2;
+      border-left: 3px solid var(--green);
+      border-radius: 0 6px 6px 0;
+      flex: 1;
+      font-family: ui-monospace, Consolas, 'Cascadia Code', monospace;
+      font-size: 11.5px;
+      line-height: 1.78;
+      padding: 16px 42px 16px 18px;
+      position: relative;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: 1px solid rgba(18,84,67,0.28);
+      border-radius: 5px;
+      color: var(--green);
+      cursor: pointer;
+      font: 11px inherit;
+      padding: 3px 9px;
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      transition: background .15s, color .15s;
+    }
+
+    .btn-copy:hover, .btn-copy.ok {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .prompt-techniques {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .ptag {
+      background: #ece7db;
+      border-radius: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 3px 8px;
+    }
+
+    /* ===== Hackathon Section ===== */
+    .hackathon-section { padding: 91px 0 0; }
+
+    .hackathon-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 44px;
+    }
+
+    .hackathon-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      display: flex;
+      gap: 22px;
+      padding: 30px;
+    }
+
+    .hk-icon {
+      align-items: center;
+      background: #fef3e2;
+      border-radius: 10px;
+      display: flex;
+      flex-shrink: 0;
+      font-size: 28px;
+      height: 56px;
+      justify-content: center;
+      width: 56px;
+    }
+
+    .hk-content h3 {
+      font-family: Georgia, "Noto Serif SC", serif;
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .hk-content p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .hk-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .hk-badge {
+      background: #fef3e2;
+      border: 1px solid #f0d49a;
+      border-radius: 4px;
+      color: var(--amber);
+      font-size: 11px;
+      padding: 3px 9px;
+    }
+
+    .hk-outcome {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 16px;
+      padding-top: 13px;
+    }
+
+    /* wider capability grid */
+    .capability-grid-4 {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .capability-grid-4 article {
+      border-top: 1px solid var(--line);
+      padding: 27px 22px 0 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .capability-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 920px) {
+      .prompt-grid  { grid-template-columns: 1fr; }
+      .hackathon-grid { grid-template-columns: 1fr; }
+      .pipeline-steps { flex-direction: column; }
+      .ps-arrow { justify-content: center; padding: 6px 0; transform: rotate(90deg); }
+    }
+
+    @media (max-width: 620px) {
+      .hackathon-card { flex-direction: column; }
+    }
+
+    /* Back-to-top button */
+    #backToTop {
+      align-items: center;
+      background: var(--green);
+      border: none;
+      border-radius: 50%;
+      bottom: 32px;
+      box-shadow: 0 4px 16px rgba(18,84,67,.28);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      font-size: 20px;
+      height: 44px;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      right: 28px;
+      transition: opacity .25s, transform .25s;
+      transform: translateY(10px);
+      width: 44px;
+      z-index: 900;
+    }
+
+    #backToTop.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    #backToTop:hover { filter: brightness(1.12); }
+
+    /* Nav scroll active state */
+    .site-nav a.nav-active {
+      color: var(--green);
+      font-weight: 700;
+    }
+  </style>
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Yilin AI 作品集首页">
+      <span class="brand-mark">YL</span>
+      <span>Yilin / AI Portfolio</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="#projects">作品</a>
+      <a href="#roadmap">延伸方向</a>
+      <a href="#automation">工具链</a>
+      <a href="#prompts">Prompt</a>
+      <a href="#about">关于我</a>
+      <a href="presentation.html">演示模式</a>
+      <a class="nav-contact" href="#contact">联系</a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">AI PRACTICE / AUTOMATION & PRODUCT</p>
+        <h1>把 AI 变成<br><span>能验证的业务成果</span></h1>
+        <p class="hero-lead">从每日自动化工作流、Prompt 工程到黑客松应用，我探索如何让 AI 稳健落地于真实工作与个人项目。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#projects">查看代表作品</a>
+          <a class="button secondary" href="presentation.html">打开可编辑演示</a>
+        </div>
+      </div>
+      <div class="hero-panel" aria-label="能力概览">
+        <div class="signal">
+          <span class="signal-dot"></span>
+          <span>Portfolio v2.0 / 持续更新中</span>
+        </div>
+        <div class="pipeline">
+          <div class="pipeline-row active">
+            <span>01</span>
+            <strong>定义问题与目标</strong>
+            <small>context</small>
+          </div>
+          <div class="pipeline-row active">
+            <span>02</span>
+            <strong>设计 Prompt 与流程</strong>
+            <small>engineer</small>
+          </div>
+          <div class="pipeline-row active">
+            <span>03</span>
+            <strong>自动化执行与输出</strong>
+            <small>automate</small>
+          </div>
+          <div class="pipeline-row active">
+            <span>04</span>
+            <strong>复核验证与迭代</strong>
+            <small>validate</small>
+          </div>
+        </div>
+        <dl class="metrics">
+          <div><dt>10+</dt><dd>实践案例</dd></div>
+          <div><dt>Codex + n8n</dt><dd>工具链</dd></div>
+          <div><dt>Eazo</dt><dd>黑客松参赛</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===== INTRO STRIP ===== -->
+    <section class="intro-strip" aria-label="关注方向">
+      <span>自动化工作流</span>
+      <span>Prompt 工程</span>
+      <span>风控知识库</span>
+      <span>数据分析</span>
+      <span>黑客松应用</span>
+      <span>人机协同</span>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section class="section projects" id="projects">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SELECTED WORK</p>
+          <h2>代表作品</h2>
+        </div>
+        <p>涵盖自动化工作流、工作提效、知识库构建、医疗 RAG 与数据工具，内容已做公开展示处理。</p>
+      </div>
+
+      <div class="filters" aria-label="作品筛选">
+        <button class="filter active" type="button" data-filter="all">全部</button>
+        <button class="filter" type="button" data-filter="automation">自动化</button>
+        <button class="filter" type="button" data-filter="productivity">工作提效</button>
+        <button class="filter" type="button" data-filter="risk">知识管理</button>
+        <button class="filter" type="button" data-filter="data">数据工具</button>
+      </div>
+
+      <div class="project-grid">
+
+        <!-- 01 AI 日报自动化 ← 主推 -->
+        <article class="project-card feature has-preview" data-category="automation">
+          <div class="feature-copy">
+            <div class="card-meta"><span class="tag">自动化 / 真实产品</span><span>01</span></div>
+            <h3>AI 日报自动化系统</h3>
+            <p>基于 Codex 定时任务，每天 9:00 自动搜集 AI 资讯、结构化整理后发布到日报网站，并将结果推送至 Gmail 邮箱。</p>
+            <div class="card-outcome">成果：自动任务已配置为每日运行；工具链：Codex → 网站 Webhook → Gmail</div>
+            <div class="card-actions">
+              <a href="projects/ai-daily-report.html">查看案例 →</a>
+              <a class="live-link" href="https://report-weaver-daily.lovable.app/" target="_blank" rel="noopener noreferrer">访问真实日报 ↗</a>
+            </div>
+          </div>
+          <a class="project-preview" href="projects/ai-daily-report.html" aria-label="查看 AI 日报自动化系统案例">
+            <img src="assets/images/ai-daily-report-home.png" alt="知识日报网站公开首页截图，显示 AI 日报最新一期入口" loading="lazy">
+            <span>查看产品实景</span>
+          </a>
+        </article>
+
+        <!-- 02 版本化知识库 -->
+        <article class="project-card" data-category="risk">
+          <div class="card-meta"><span class="tag">知识管理</span><span>02</span></div>
+          <h3>版本化知识库与 AI 复核闭环</h3>
+          <p>将 Excel 维护的规则知识资产转化为具备版本追踪、AI 建议与人工审核链路的结构化流程。</p>
+          <div class="card-outcome">证明材料：脱敏 Demo 已输出 20 个样本、15 项版本差异与验证报告</div>
+          <a href="projects/risk-knowledge-base.html">查看案例 →</a>
+        </article>
+
+        <!-- 03 人审信息平台 -->
+        <article class="project-card" data-category="productivity">
+          <div class="card-meta"><span class="tag teal">工作提效</span><span>03</span></div>
+          <h3>人审信息平台加速</h3>
+          <p>用 Codex 联网搜索能力辅助项目类型快速分类，加快人工审核前的信息预处理速度。</p>
+          <div class="card-outcome">展示：可筛选的脱敏审核台 Demo，呈现需复核与可确认的分流路径</div>
+          <a href="projects/human-review-platform.html">体验演示 →</a>
+        </article>
+
+        <!-- 04 药品知识库 -->
+        <article class="project-card" data-category="productivity">
+          <div class="card-meta"><span class="tag teal">工作提效</span><span>04</span></div>
+          <h3>药品知识库构建</h3>
+          <p>通过 Codex 联网搜索批量收集药品说明书关键字段，结构化提取后助力构建药品规则底座。</p>
+          <div class="card-outcome">展示：适应症采集、官方证据记录与“多适应症不直推”验证流程</div>
+          <a href="projects/drug-knowledge-base.html">查看验证流程 →</a>
+        </article>
+
+        <!-- 05 疾病规则复核 -->
+        <article class="project-card" data-category="productivity">
+          <div class="card-meta"><span class="tag teal">工作提效</span><span>05</span></div>
+          <h3>疾病推断规则 AI 复核</h3>
+          <p>使用 Codex 联网搜索对历史疾病推断规则进行准确性核查，识别过时或存疑规则并推动更新。</p>
+          <div class="card-outcome">展示：可保留、转人工、禁止直推的规则审计判定框架</div>
+          <a href="projects/disease-rule-review.html">查看审计方法 →</a>
+        </article>
+
+        <!-- 06 Word 文档格式 -->
+        <article class="project-card" data-category="productivity">
+          <div class="card-meta"><span class="tag teal">工作提效</span><span>06</span></div>
+          <h3>Word 文档格式规范化</h3>
+          <p>利用 Codex 文件处理能力批量统一 Word 文档格式规范，减少重复排版与人工校对工作。</p>
+          <div class="card-outcome">展示：格式校验清单、交付检查路径与批量处理扩展思路</div>
+          <a href="projects/doc-formatter.html">查看规范校验 →</a>
+        </article>
+
+        <!-- 07 SQL 练习器 -->
+        <article class="project-card" data-category="data">
+          <div class="card-meta"><span class="tag blue">数据工具</span><span>07</span></div>
+          <h3>交互式 SQL 指标练习器</h3>
+          <p>无需后端，在浏览器中运行真实 SQL 查询，围绕互联网常用业务指标设计可操作练习场景。</p>
+          <div class="card-outcome">可验证 Demo：5 道指标题 · 3 张模拟业务表 · 浏览器内真实运行</div>
+          <a href="projects/sql-trainer.html">进入练习器 →</a>
+        </article>
+
+        <!-- 08 n8n 工作流 -->
+        <article class="project-card" data-category="automation">
+          <div class="card-meta"><span class="tag purple">自动化探索</span><span>08</span></div>
+          <h3>n8n 工作流探索</h3>
+          <p>排查 n8n 接入 DeepSeek 时的网络、节点配置与数据存储问题，将流程恢复到可稳定执行状态。</p>
+          <div class="card-outcome">展示：连接、配置、存储到结果输出的脱敏恢复验证路径</div>
+          <a href="projects/n8n-workflow.html">查看恢复验证 →</a>
+        </article>
+
+        <!-- 09 医学 RAG + 知识图谱 -->
+        <article class="project-card" data-category="risk">
+          <div class="card-meta"><span class="tag orange">医疗 RAG</span><span>09</span></div>
+          <h3>医学知识图谱 + 向量检索问答系统</h3>
+          <p>针对医学指南中术语别名、表述不一致和实体关系复杂的问题，搭建语义向量库与 Neo4j 知识图谱双路知识库。</p>
+          <div class="card-outcome">展示：PDF 清洗分块、语义召回、实体关系入库与图谱 + 原文片段融合问答链路</div>
+          <a href="projects/knowledge-graph-rag.html">查看案例 →</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ===== PRODUCT EXTENSIONS ===== -->
+    <section class="section roadmap" id="roadmap">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FROM CASE TO PRODUCT</p>
+          <h2>这些项目还可以改造成什么</h2>
+        </div>
+        <p>从单次辅助任务，进一步升级为可审计、可运营、可持续迭代的 AI 产品能力。</p>
+      </div>
+      <div class="extension-grid">
+        <article class="extension-card">
+          <h3>人审 Copilot 工作台</h3>
+          <p>将项目检索、AI 建议、证据引用、审核意见与复核升级整合成队列化产品。</p>
+        </article>
+        <article class="extension-card">
+          <h3>可审计药品规则库</h3>
+          <p>以官方证据、核验日期和版本记录支撑规则发布、回滚与监管变更响应。</p>
+        </article>
+        <article class="extension-card">
+          <h3>风险质量监控中心</h3>
+          <p>持续追踪直通率、人工复核率、问题召回与规则失效率，辅助阈值调整。</p>
+        </article>
+        <article class="extension-card">
+          <h3>监管证据巡检服务</h3>
+          <p>定期核对适应症更新、来源失效和规则变更，为发布与下线任务提供提醒。</p>
+        </article>
+        <article class="extension-card">
+          <h3>文档交付质检平台</h3>
+          <p>把格式模板、隐私检查和批量导出组合为可复用的报告交付能力。</p>
+        </article>
+        <article class="extension-card">
+          <h3>数据技能训练产品</h3>
+          <p>将 SQL 互动练习扩展为带指标口径、自动评测和岗位任务的数据训练环境。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== AUTOMATION PIPELINE ===== -->
+    <section class="section auto-pipeline-section" id="automation">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">AUTOMATION SHOWCASE</p>
+          <h2>AI 日报自动化工具链</h2>
+        </div>
+        <p>一条从定时触发到网站同步与邮件送达的自动化流水线。</p>
+      </div>
+
+      <div class="pipeline-board">
+        <p class="pipeline-board-label">每日执行流程 · Daily Automated Pipeline</p>
+        <div class="pipeline-steps">
+
+          <div class="ps-node dark">
+            <span class="ps-time">⏰ 09:00 · 每日</span>
+            <div class="ps-label">Codex 定时任务</div>
+            <div class="ps-desc">自动触发<br>无需人工操作</div>
+          </div>
+          <div class="ps-arrow">→</div>
+
+          <div class="ps-node">
+            <div class="ps-label">联网搜索</div>
+            <div class="ps-desc">收集当日<br>AI 领域关键动态</div>
+          </div>
+          <div class="ps-arrow">→</div>
+
+          <div class="ps-node">
+            <div class="ps-label">AI 整理生成</div>
+            <div class="ps-desc">结构化处理<br>输出标准日报格式</div>
+          </div>
+          <div class="ps-arrow">→</div>
+
+          <div class="ps-node split">
+            <div class="ps-label" style="text-align:center;margin-bottom:4px;">多路输出</div>
+            <div class="ps-sub">📧 Gmail 邮件推送</div>
+            <div class="ps-sub">🌐 网站 Webhook 发布</div>
+          </div>
+          <div class="ps-arrow">→</div>
+
+          <div class="ps-node dark">
+            <div class="ps-label">同步结果</div>
+            <div class="ps-desc">记录发布状态<br>返回访问链接</div>
+          </div>
+
+        </div>
+        <div class="pipeline-board-footer">
+          技术栈：<strong>Codex Automation</strong> · <strong>Website Webhook</strong> · <strong>Gmail</strong>&emsp;
+          <span style="font-size:11px;">公开访问地址以每日任务同步返回结果为准</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROMPT ENGINEERING ===== -->
+    <section class="section prompt-section" id="prompts">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">PROMPT ENGINEERING</p>
+          <h2>Prompt 工程实践</h2>
+        </div>
+        <p>不同业务场景下的结构化 Prompt 设计，展示角色设定、输出约束与人机协同的方法。</p>
+      </div>
+
+      <div class="prompt-grid">
+
+        <!-- Prompt 1: Daily report -->
+        <div class="prompt-card">
+          <div class="prompt-name">AI 资讯日报收集</div>
+          <div class="prompt-context">应用于 Codex 定时任务，每日 9:00 自动执行</div>
+          <div class="prompt-block">你是一位 AI 资讯编辑。
+请搜索今天 {date} 的 AI 领域重要动态。
+
+重点关注：
+- 新模型发布或重要更新
+- AI 应用落地案例
+- 行业政策与监管动向
+
+输出要求：
+1. 每条资讯注明来源和日期
+2. 按重要程度排序
+3. 简洁中文描述，≤100 字/条
+4. 最终输出 Markdown 格式<button class="btn-copy">复制</button></div>
+          <div class="prompt-techniques">
+            <span class="ptag">角色设定</span>
+            <span class="ptag">输出格式约束</span>
+            <span class="ptag">结构化指令</span>
+          </div>
+        </div>
+
+        <!-- Prompt 2: Drug info -->
+        <div class="prompt-card">
+          <div class="prompt-name">药品说明书结构化提取</div>
+          <div class="prompt-context">用于批量构建药品知识库规则底座</div>
+          <div class="prompt-block">请搜索以下药品的说明书信息：
+药品名称：{drug_name}
+
+提取字段：
+- 适应症
+- 用法用量
+- 禁忌症（含疾病/人群）
+- 主要不良反应
+
+来源优先级：
+国家药监局 > 医院药学部 > 药企官网
+
+输出：标准 JSON 格式
+便于导入知识库系统<button class="btn-copy">复制</button></div>
+          <div class="prompt-techniques">
+            <span class="ptag">来源优先级</span>
+            <span class="ptag">结构化输出</span>
+            <span class="ptag">变量占位符</span>
+          </div>
+        </div>
+
+        <!-- Prompt 3: Project classification -->
+        <div class="prompt-card">
+          <div class="prompt-name">项目类型分类辅助</div>
+          <div class="prompt-context">用于人审信息平台的前置分类加速</div>
+          <div class="prompt-block">你是项目分类专家。
+请对以下项目进行分类：
+
+项目名称：{name}
+项目描述：{description}
+参考分类标准：{taxonomy}
+
+输出：
+1. 主类别 + 子类别
+2. 置信度（高 / 中 / 低）
+3. 低置信度标记「需人工复核」
+4. 简述分类依据（≤50 字）<button class="btn-copy">复制</button></div>
+          <div class="prompt-techniques">
+            <span class="ptag">置信度分级</span>
+            <span class="ptag">人机协同设计</span>
+            <span class="ptag">可解释输出</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== HACKATHON ===== -->
+    <section class="section hackathon-section" id="hackathon">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">HACKATHON / EAZO</p>
+          <h2>黑客松应用开发</h2>
+        </div>
+        <p>参加 Eazo 黑客松期间，快速从想法到上线发布的两款 AI 应用。</p>
+      </div>
+
+      <div class="hackathon-grid">
+
+        <div class="hackathon-card">
+          <div class="hk-icon">🧊</div>
+          <div class="hk-content">
+            <h3>冰箱管家</h3>
+            <p>AI 驱动的食材管理应用，帮助用户追踪冰箱库存、发出临期提醒并推荐菜谱，减少食物浪费。</p>
+            <div class="hk-tags">
+              <span class="hk-badge">Eazo 平台</span>
+              <span class="hk-badge">AI 应用</span>
+              <span class="hk-badge">黑客松</span>
+            </div>
+            <div class="hk-outcome">从想法到上线，在黑客松期间完成完整产品周期，已发布于 Eazo 平台</div>
+          </div>
+        </div>
+
+        <div class="hackathon-card">
+          <div class="hk-icon">🏠</div>
+          <div class="hk-content">
+            <h3>看房记录本</h3>
+            <p>AI 辅助的看房工具，帮助用户结构化记录每套房源信息，智能整理并对比购房决策要素。</p>
+            <div class="hk-tags">
+              <span class="hk-badge">Eazo 平台</span>
+              <span class="hk-badge">AI 应用</span>
+              <span class="hk-badge">黑客松</span>
+            </div>
+            <div class="hk-outcome">解决看房信息零散记录的真实痛点，已发布于 Eazo 平台</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== CAPABILITIES ===== -->
+    <section class="section capabilities" id="capabilities">
+      <div class="section-heading compact">
+        <div>
+          <p class="eyebrow">CAPABILITIES</p>
+          <h2>我能解决的问题</h2>
+        </div>
+      </div>
+      <div class="capability-grid-4">
+        <article>
+          <span class="number">01</span>
+          <h3>AI 自动化工作流</h3>
+          <p>设计定时触发、多平台联动的 AI 工作流，让重复性任务全自动执行并可持续维护。</p>
+        </article>
+        <article>
+          <span class="number">02</span>
+          <h3>Prompt 工程</h3>
+          <p>为不同业务场景设计结构化 Prompt，平衡输出质量、格式规范与可控性边界。</p>
+        </article>
+        <article>
+          <span class="number">03</span>
+          <h3>知识库与数据分析</h3>
+          <p>将非结构化信息转化为可检索、可验证的知识资产，结合 SQL 构建可追溯的指标体系。</p>
+        </article>
+        <article>
+          <span class="number">04</span>
+          <h3>人机协同设计</h3>
+          <p>在 AI 与人工审核之间设计合理边界，确保高风险决策有人工复核留痕与回滚机制。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== METHOD ===== -->
+    <section class="section method" id="method">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">HOW I WORK</p>
+          <h2>从想法到可验证结果</h2>
+        </div>
+        <p>AI 不是效果展示的捷径。我关注的是：输出能被理解、被复核、被指标验证。</p>
+      </div>
+      <ol class="timeline">
+        <li>
+          <span>01</span>
+          <div><h3>定义问题</h3><p>厘清使用场景、风险边界与成功标准。</p></div>
+        </li>
+        <li>
+          <span>02</span>
+          <div><h3>设计 Prompt 与流程</h3><p>构建提示词、数据节点和人工审核机制。</p></div>
+        </li>
+        <li>
+          <span>03</span>
+          <div><h3>自动化执行</h3><p>打通工具链路，让 AI 处理重复性高的部分。</p></div>
+        </li>
+        <li>
+          <span>04</span>
+          <div><h3>验证与沉淀</h3><p>通过样本、指标检验有效性，形成可复用文档。</p></div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section about" id="about">
+      <div class="about-card">
+        <p class="eyebrow">ABOUT ME</p>
+        <h2>Yilin</h2>
+        <p class="about-lead">我是一名 AI 应用实践者，专注于将 AI 工具落地到真实工作流程中，追求可验证、可迭代的结果。</p>
+        <p>当前探索聚焦于：Codex 自动化工作流、Prompt 工程设计、保险风控知识管理与 SQL 数据分析。同时参与 Eazo 黑客松，探索 AI 在日常生活场景中的应用。网站展示内容已做脱敏处理，不涉及敏感业务数据。</p>
+      </div>
+      <aside class="principles" aria-label="作品公开原则">
+        <h3>公开原则</h3>
+        <ul>
+          <li>不展示客户、个人或内部敏感数据</li>
+          <li>演示指标清晰标注为样本或模拟结果</li>
+          <li>重点说明方法、角色与业务价值</li>
+          <li>工具链涉及的 API Key 与凭证均不公开</li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="contact" id="contact">
+      <div>
+        <p class="eyebrow">CONTACT</p>
+        <h2>一起聊聊 AI 如何解决实际问题</h2>
+      </div>
+      <div class="contact-box">
+        <p>欢迎交流 AI 应用落地、Prompt 工程或自动化工作流话题。</p>
+        <a class="button primary" href="mailto:13733768756@163.com">发邮件联系</a>
+      </div>
+    </section>
+
+  </main>
+
+  <button id="backToTop" aria-label="返回顶部" title="返回顶部">↑</button>
+
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Yilin. AI Portfolio.</span>
+    <span>Built for GitHub Pages</span>
+  </footer>
+
+  <script>
+    // Copy button for prompts
+    document.querySelectorAll('.btn-copy').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const block = this.closest('.prompt-block');
+        // Extract only text nodes (exclude button text)
+        let text = '';
+        block.childNodes.forEach(n => {
+          if (n.nodeType === Node.TEXT_NODE) text += n.textContent;
+        });
+        text = text.trim();
+        navigator.clipboard.writeText(text).then(() => {
+          this.textContent = '已复制 ✓';
+          this.classList.add('ok');
+          setTimeout(() => {
+            this.textContent = '复制';
+            this.classList.remove('ok');
+          }, 2000);
+        }).catch(() => {
+          // Fallback
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          this.textContent = '已复制 ✓';
+          this.classList.add('ok');
+          setTimeout(() => {
+            this.textContent = '复制';
+            this.classList.remove('ok');
+          }, 2000);
+        });
+      });
+    });
+
+    // Back-to-top button
+    const btt = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    btt.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Nav scroll active state
+    (function () {
+      const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
+      const sections = Array.from(navLinks)
+        .map(a => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+
+      function updateNav() {
+        const scrollY = window.scrollY + 120;
+        let active = null;
+        sections.forEach(sec => {
+          if (sec.offsetTop <= scrollY) active = sec;
+        });
+        navLinks.forEach(a => {
+          const target = document.querySelector(a.getAttribute('href'));
+          a.classList.toggle('nav-active', target === active);
+        });
+      }
+
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    })();
+  </script>
+
+</body>
+</html>
