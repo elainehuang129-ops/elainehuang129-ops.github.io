@@ -1,7 +1,170 @@
 {
-  "generated_at": "2026-07-04T23:15:44Z",
-  "report_count": 2,
+  "generated_at": "2026-07-29T23:33:10Z",
+  "report_count": 3,
   "reports": [
+    {
+      "report_date": "2026-07-30",
+      "issue_number": "022",
+      "title": "2026年7月30日 AI 日报",
+      "summary": "过去 24 小时里，AI 行业最值得看的不是单一模型榜单，而是三条更实的竞争线同时加速：OpenAI 把科研用户直接拉进高端工作流，xAI 抢语音入口，微软与 Meta 则用财报把 AI 收入与资本开支的兑现逻辑摆到台面；与此同时，行业内部开始更公开地讨论前沿能力该不该“踩刹车”。",
+      "tags": [
+        "OpenAI",
+        "Microsoft",
+        "Meta",
+        "xAI",
+        "科研",
+        "语音",
+        "政策",
+        "财报"
+      ],
+      "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "amber",
+        "ink"
+      ],
+      "mood": "克制",
+      "items": [
+        {
+          "sort_order": 1,
+          "headline": "OpenAI 推出 ChatGPT for Academic Researchers，面向 10 万名科研人员免费开放前沿工具",
+          "brief": "OpenAI 于 2026 年 7 月 29 日宣布启动 ChatGPT for Academic Researchers 计划，表示将把前沿模型与工具免费提供给 10 万名科学家、数学家和工程师。官方称首批今夏先覆盖 1 万名研究者，并计划在 2027 年前扩展到 10 万名。",
+          "commentary": "这件事的重要性不在公益色彩，而在入口控制权。谁先占住高频科研工作流，谁就更有机会把模型能力延伸成长期的数据、协作和付费工具链关系。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/chatgpt-for-academic-researchers/",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 2,
+          "headline": "OpenAI 披露 GPT-5.6 的效率优化路径，强调以更低推理成本换取更高业务产出",
+          "brief": "OpenAI 于 2026 年 7 月 29 日发布工程说明，介绍 GPT-5.6 如何通过推理栈优化、缓存、负载均衡、speculative decoding 和 agentic harness 设计提升效率。文中称 GPT-5.6 Sol 参与了多项内核与推理优化，部分优化把端到端服务成本降低了 20%，token 生成效率提升超过 15%。",
+          "commentary": "这反映出头部模型竞争正在从“谁最强”转向“谁更能把高能力变成可负担的生产结果”。如果效率曲线继续改善，模型层的价格压力会更快传导到全行业。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 3,
+          "headline": "OpenAI 称两项设置让 ARC-AGI-3 得分提升约三倍，测试时配置开始成为能力杠杆",
+          "brief": "OpenAI 于 2026 年 7 月 29 日发布研究文章称，在 ARC-AGI-3 上启用 retained reasoning 和 compaction 后，GPT-5.6 Sol 在公开任务集上的分数从 13.3% 提升到 38.3%，同时输出 token 下降约 6 倍。文章强调，评测结果不只受模型本身影响，也受 API 设置和 harness 设计影响。",
+          "commentary": "这说明模型能力的商业化门槛正在上移。未来企业和开发者不只要买模型，还要买更成熟的调用、评测和任务编排系统，才能真正把能力释放出来。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores/",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 4,
+          "headline": "xAI 发布 Grok Voice Think Fast 2.0，押注语音实时交互与低延迟工具调用",
+          "brief": "xAI 于 2026 年 7 月 29 日发布 Grok Voice Think Fast 2.0，称其为新一代 speech-to-speech 语音模型。官方披露，该模型在 Artificial Analysis 语音质量指数上高于上一代，并称在生产环境中通常能在第一句话结束前完成工具调用，定价为每分钟 0.08 美元音频。",
+          "commentary": "语音模型的意义不只是“多一个模态”，而是它可能成为 AI agent 的默认入口。谁能把语音延迟、工具调用和任务完成率一起做好，谁就更接近真正的日常使用场景。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "xAI",
+              "source_url": "https://x.ai/news/grok-voice-think-fast-2",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 5,
+          "headline": "微软 FY2026 Q4 财报显示云与 AI 继续拉动增长，Azure 年收入首次突破 1000 亿美元",
+          "brief": "微软在 2026 年 7 月 29 日发布 FY2026 Q4 财报，季度营收 900 亿美元，同比增长 18%；Azure 和其他云服务收入增长 43%。微软还披露 Azure 年收入首次超过 1000 亿美元，Microsoft 365 Copilot 付费席位超过 3000 万。",
+          "commentary": "这类数据的价值在于，它把“AI 很热”变成了更可验证的收入结构。对市场而言，真正关键的不是 demo，而是 AI 是否正在转化为可持续的云收入、席位收入和高续费企业合同。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Microsoft Investor Relations",
+              "source_url": "https://www.microsoft.com/en-us/investor/earnings/fy-2026-q4/press-release-webcast",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 6,
+          "headline": "Meta 二季度财报继续强调 AI 正在驱动广告与新业务，但资本开支兑现仍是核心考题",
+          "brief": "Meta 于美国东部时间 2026 年 7 月 29 日发布第二季度业绩，季度营收 608.01 亿美元，同比增长 28%；成本与费用同比增长 55%，营业利润同比下降 8%。Meta 在新闻稿中表示，AI 正在加速核心业务、下一代产品和新的企业机会。",
+          "commentary": "Meta 的问题不是有没有 AI 故事，而是巨额算力和数据中心投入能否持续转成更高利润与更强护城河。对投资者来说，收入增量、资本回收周期和竞争壁垒要分开看。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Meta",
+              "source_url": "https://www.prnewswire.com/news-releases/meta-reports-second-quarter-2026-results-302838214.html",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 7,
+          "headline": "超过 1100 名科技员工联名呼吁美国支持国际机制，为前沿 AI 发展节奏建立治理工具",
+          "brief": "Reuters 于 2026 年 7 月 28 日 18:02 发布报道，称来自 Meta、Anthropic、OpenAI 和 Google 等公司的 1100 多名员工呼吁美国政府支持国际合作，开发用于管理前沿 AI 发展节奏的技术与治理工具。报道提到，该倡议名为 Pacing the Frontier，并获得多家非营利组织支持。",
+          "commentary": "这说明“要不要更快”已经不只是外部监管者的议题，行业内部也开始公开分化。未来的监管变量不只影响模型上线速度，也会影响资本、招聘与大型客户采购的信心。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Reuters via WTVB",
+              "source_url": "https://wtvbam.com/2026/07/28/tech-employees-call-for-us-backed-global-effort-to-manage-risks-of-advanced-ai/",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "Pacing the Frontier",
+              "source_url": "https://www.pacingthefrontier.com/",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 8,
+          "headline": "新论文用两篇 NeurIPS 2026 未发表论文做“影子评审”，指出 AI 代理仍难独立完成开放式 AI 研究",
+          "brief": "arXiv 于 2026 年 7 月 29 日收录论文《Can AI agents conduct open-ended AI research?》，作者团队让前沿代理在六天内、花费数千美元算力去攻克两篇高质量未发表论文的核心研究问题。论文称代理能独立完成工程工作，但未能对核心研究问题取得实质进展，两项结果都被原作者明确否决。",
+          "commentary": "这篇论文给“AI 会很快自动化 AI 研发”这个热门判断泼了冷水。短期内，代理更像强执行层，而不是能独立提出高质量研究判断的研究员。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "arXiv",
+              "source_url": "https://arxiv.org/abs/2607.27191",
+              "source_type": "paper"
+            }
+          ]
+        }
+      ],
+      "business_analysis": {
+        "main_theme": "今天的主线是 AI 竞争开始同时沿着“高价值工作流入口”“更低成本的能力交付”和“资本开支兑现”三条线展开。",
+        "market_structure": "市场结构上，OpenAI 继续向科研工作流前推，试图把模型能力嵌进高知识密度场景；xAI 在语音入口上加速，争取日常交互触点；微软和 Meta 则用财报把云、广告和企业软件里的 AI 收益显性化。行业竞争正在从单一模型能力，转向入口、分发、成本控制和资本耐力的综合竞争。",
+        "commercialization": "商业化层面，OpenAI 的科研计划更像是在培育未来高价值用户池，短期未必直接贡献收入，但可能提高长期付费工具链渗透；微软已经证明 Copilot 席位和 Azure 增长能形成更清晰的收入闭环；Meta 仍在证明高额 AI 投入能否带来足够强的利润杠杆；xAI 则在争夺语音交互这个可能承载未来 agent 订单流的入口。",
+        "strategic_implications": "战略上，未来胜负不只取决于模型更强，还取决于谁能把能力嵌入高频场景、压低单位交付成本，并让资本市场相信其投入回报路径。治理争议同步升温，意味着领先者还必须有能力处理安全、政策和社会许可。",
+        "long_term_investment_view": "长期看，要继续区分“好公司”“好生意”和“好价格”。微软当前最接近把 AI 热度转成可见收入的成熟平台；Meta 具备庞大分发和变现底盘，但需要继续观察 capex 回收；OpenAI 和 xAI 展现出强产品势能，但在未上市或治理结构更复杂的前提下，不应把产业前景直接等同于投资可得性或估值吸引力。",
+        "tracking_metrics": [
+          "Microsoft 365 Copilot 付费席位后续增速，以及 Azure AI 相关收入在整体云增长中的占比变化",
+          "Meta 后续季度对资本开支、数据中心和 AI 变现节奏的指引是否继续上修",
+          "OpenAI 学术研究者计划的机构覆盖、活跃使用和后续商业化转化路径",
+          "xAI 语音模型的 API 定价、开发者采用和真实任务完成率是否披露",
+          "Pacing the Frontier 倡议是否得到美国政府或国际安全框架的正式回应"
+        ],
+        "thinking_questions": [
+          "科研场景里的免费导入，最终会沉淀成数据壁垒、品牌壁垒，还是高 ARPU 工具订阅？",
+          "语音会不会成为下一个主要 AI 入口，还是仍然停留在演示感强、留存弱的阶段？",
+          "当资本市场开始要求 AI 投入给出更明确回报时，哪些公司最有能力把高 capex 讲成高 ROIC 的故事？"
+        ]
+      }
+    },
     {
       "report_date": "2026-07-05",
       "issue_number": "021",
