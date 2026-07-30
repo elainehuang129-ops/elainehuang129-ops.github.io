@@ -6,7 +6,7 @@ window.AI_DAILY_DATA = {
       "report_date": "2026-07-30",
       "issue_number": "022",
       "title": "2026年7月30日 AI 日报",
-      "summary": "过去 24 小时里，AI 行业最值得看的不是单一模型榜单，而是三条更实的竞争线同时加速：OpenAI 把科研用户直接拉进高端工作流，xAI 抢语音入口，微软与 Meta 则用财报把 AI 收入与资本开支的兑现逻辑摆到台面；与此同时，行业内部开始更公开地讨论前沿能力该不该“踩刹车”。",
+      "summary": "过去 24 小时里，AI 行业最值得看的不是单一模型榜单，而是三条更实的竞争线同时加速：OpenAI 把科研用户直接拉进高端工作流，xAI 抢语音入口，微软与 Meta 则用财报把 AI 收入与资本开支的兑现逻辑摆到台面，而最新研究则提醒市场不要高估 AI 代理短期内独立做原创研究的能力。",
       "tags": [
         "OpenAI",
         "Microsoft",
@@ -14,8 +14,8 @@ window.AI_DAILY_DATA = {
         "xAI",
         "科研",
         "语音",
-        "政策",
-        "财报"
+        "财报",
+        "研究"
       ],
       "status": "published",
       "cover_variant": "hero",
@@ -112,26 +112,6 @@ window.AI_DAILY_DATA = {
         },
         {
           "sort_order": 7,
-          "headline": "超过 1100 名科技员工联名呼吁美国支持国际机制，为前沿 AI 发展节奏建立治理工具",
-          "brief": "Reuters 于 2026 年 7 月 28 日 18:02 发布报道，称来自 Meta、Anthropic、OpenAI 和 Google 等公司的 1100 多名员工呼吁美国政府支持国际合作，开发用于管理前沿 AI 发展节奏的技术与治理工具。报道提到，该倡议名为 Pacing the Frontier，并获得多家非营利组织支持。",
-          "commentary": "这说明“要不要更快”已经不只是外部监管者的议题，行业内部也开始公开分化。未来的监管变量不只影响模型上线速度，也会影响资本、招聘与大型客户采购的信心。",
-          "sources": [
-            {
-              "sort_order": 1,
-              "source_name": "Reuters via WTVB",
-              "source_url": "https://wtvbam.com/2026/07/28/tech-employees-call-for-us-backed-global-effort-to-manage-risks-of-advanced-ai/",
-              "source_type": "media"
-            },
-            {
-              "sort_order": 2,
-              "source_name": "Pacing the Frontier",
-              "source_url": "https://www.pacingthefrontier.com/",
-              "source_type": "official"
-            }
-          ]
-        },
-        {
-          "sort_order": 8,
           "headline": "新论文用两篇 NeurIPS 2026 未发表论文做“影子评审”，指出 AI 代理仍难独立完成开放式 AI 研究",
           "brief": "arXiv 于 2026 年 7 月 29 日收录论文《Can AI agents conduct open-ended AI research?》，作者团队让前沿代理在六天内、花费数千美元算力去攻克两篇高质量未发表论文的核心研究问题。论文称代理能独立完成工程工作，但未能对核心研究问题取得实质进展，两项结果都被原作者明确否决。",
           "commentary": "这篇论文给“AI 会很快自动化 AI 研发”这个热门判断泼了冷水。短期内，代理更像强执行层，而不是能独立提出高质量研究判断的研究员。",
@@ -146,17 +126,17 @@ window.AI_DAILY_DATA = {
         }
       ],
       "business_analysis": {
-        "main_theme": "今天的主线是 AI 竞争开始同时沿着“高价值工作流入口”“更低成本的能力交付”和“资本开支兑现”三条线展开。",
+        "main_theme": "今天的主线是 AI 竞争开始同时沿着“高价值工作流入口”“更低成本的能力交付”和“资本开支兑现”三条线展开，而最新研究提醒市场不要把原创研究自动化进度想得过快。",
         "market_structure": "市场结构上，OpenAI 继续向科研工作流前推，试图把模型能力嵌进高知识密度场景；xAI 在语音入口上加速，争取日常交互触点；微软和 Meta 则用财报把云、广告和企业软件里的 AI 收益显性化。行业竞争正在从单一模型能力，转向入口、分发、成本控制和资本耐力的综合竞争。",
         "commercialization": "商业化层面，OpenAI 的科研计划更像是在培育未来高价值用户池，短期未必直接贡献收入，但可能提高长期付费工具链渗透；微软已经证明 Copilot 席位和 Azure 增长能形成更清晰的收入闭环；Meta 仍在证明高额 AI 投入能否带来足够强的利润杠杆；xAI 则在争夺语音交互这个可能承载未来 agent 订单流的入口。",
-        "strategic_implications": "战略上，未来胜负不只取决于模型更强，还取决于谁能把能力嵌入高频场景、压低单位交付成本，并让资本市场相信其投入回报路径。治理争议同步升温，意味着领先者还必须有能力处理安全、政策和社会许可。",
+        "strategic_implications": "战略上，未来胜负不只取决于模型更强，还取决于谁能把能力嵌入高频场景、压低单位交付成本，并让资本市场相信其投入回报路径。与此同时，研究端的最新证据说明，企业在布局 agent 时仍应把人类研究判断保留在关键节点。",
         "long_term_investment_view": "长期看，要继续区分“好公司”“好生意”和“好价格”。微软当前最接近把 AI 热度转成可见收入的成熟平台；Meta 具备庞大分发和变现底盘，但需要继续观察 capex 回收；OpenAI 和 xAI 展现出强产品势能，但在未上市或治理结构更复杂的前提下，不应把产业前景直接等同于投资可得性或估值吸引力。",
         "tracking_metrics": [
           "Microsoft 365 Copilot 付费席位后续增速，以及 Azure AI 相关收入在整体云增长中的占比变化",
           "Meta 后续季度对资本开支、数据中心和 AI 变现节奏的指引是否继续上修",
           "OpenAI 学术研究者计划的机构覆盖、活跃使用和后续商业化转化路径",
           "xAI 语音模型的 API 定价、开发者采用和真实任务完成率是否披露",
-          "Pacing the Frontier 倡议是否得到美国政府或国际安全框架的正式回应"
+          "前沿 AI 代理在开放式研究任务上的复现实验结果，是否开始出现可重复的正样本"
         ],
         "thinking_questions": [
           "科研场景里的免费导入，最终会沉淀成数据壁垒、品牌壁垒，还是高 ARPU 工具订阅？",
