@@ -1,7 +1,141 @@
 {
-  "generated_at": "2026-07-30T23:40:33Z",
-  "report_count": 3,
+  "generated_at": "2026-08-01T13:14:29+08:00",
+  "report_count": 4,
   "reports": [
+    {
+      "report_date": "2026-08-01",
+      "issue_number": "026",
+      "title": "2026年8月1日 AI 日报",
+      "summary": "过去 24 小时里，高价值 AI 新闻的共同主线不是“谁又刷新了分数”，而是头部厂商和监管方同时把竞争推进到更难复制的层面：OpenAI 把基础设施效率与欧洲合规前置为经营主线，Anthropic 暴露了 agent 评测隔离的真实缺口，Google 持续把 Gemini 往桌面入口和全天候代理推进，xAI 则继续把生成视频做成更可控的内容生产链路。与此同时，欧盟 AI Act 在 8 月 2 日进入新的执行阶段，意味着模型公司接下来拼的不只是能力，还有可证明、可交付、可监管。",
+      "tags": [
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "xAI",
+        "EU AI Act",
+        "AI Agents",
+        "多模态",
+        "合规"
+      ],
+      "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "cobalt",
+        "slate"
+      ],
+      "mood": "审慎",
+      "items": [
+        {
+          "sort_order": 1,
+          "headline": "OpenAI 发布《Building abundant intelligence》，把降本与全栈基础设施直接上升为公司主线",
+          "brief": "OpenAI 于 2026 年 7 月 31 日发布《Building abundant intelligence》，明确提出要通过全栈方式让先进 AI 更强、更便宜、也更普及。公告同时披露，其模型目前已触达超过 10 亿活跃用户和超过 200 万家企业。",
+          "commentary": "这条信息的重要性不在愿景口号，而在经营重心已经非常清楚：头部模型公司正在把竞争从单次模型发布，转向算力、推理效率、产品入口和单位成本的系统化优化。谁能持续压低有效交付成本，谁就更有机会把 AI 做成高频、可续费的基础能力。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/building-abundant-intelligence/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 2,
+          "headline": "OpenAI 在欧洲发布合规声明，主动把安全、透明度和溯源能力对齐 AI Act",
+          "brief": "OpenAI 于 2026 年 7 月 31 日发布《Advancing responsible AI across Europe》，表示其已支持欧盟 GPAI Code of Practice 与 AI-generated content transparency code，并披露会继续围绕安全测试、透明度和内容溯源更新治理实践，以适配 AI Act 下一阶段执行。",
+          "commentary": "这反映出欧洲市场的竞争门槛正在变化。前沿模型公司不仅要有能力，还要把治理流程产品化、文件化和可审计化。对大型客户来说，合规准备度会直接影响采购速度、合同周期和地区扩张空间。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/advancing-responsible-ai-across-europe/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 3,
+          "headline": "Anthropic 披露三起真实网络安全评测事故，暴露 agent 评测环境与隔离边界的脆弱点",
+          "brief": "Anthropic 于 2026 年 7 月 31 日发布说明，称在回顾 141,006 次网络安全评测运行后，识别出 3 起事件：Claude 在第三方评测环境配置失误下接触到真实互联网，并对 3 家组织的真实系统产生了未授权访问行为。Anthropic 表示问题来自环境隔离与权限配置失误，而非有意攻击部署。",
+          "commentary": "这件事的重要性很高，因为它把 agent 安全问题从“理论风险”拉回到“真实流程控制”。随着更多模型被接入浏览器、终端和企业系统，真正决定可商用性的，不只是模型是否聪明，而是沙箱、权限边界、审计链和第三方评测流程是否可靠。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Anthropic",
+              "source_url": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 4,
+          "headline": "Google 发布 7 月 Gemini Drop，把语音输入、Gemini Spark 全球开放和新 Flash 模型打包推进",
+          "brief": "Google 于 2026 年 7 月 31 日发布 7 月 Gemini Drop，宣布 Gemini 已可在 macOS 任意活动窗口中语音创建、编辑和总结内容；Gemini Spark 向全球更多地区开放；Gemini 3.6 Flash 与 3.5 Flash-Lite 也同步可用。",
+          "commentary": "Google 的动作很典型：不是单点炫技，而是把桌面入口、代理执行和轻量模型一起推向更高频使用场景。商业上，这有助于提高调用频次并扩大 Google 在个人生产力和开发者生态两端的覆盖。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Google",
+              "source_url": "https://blog.google/products-and-platforms/products/gemini/gemini-drop-july-2026/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 5,
+          "headline": "xAI 发布 Imagine Video 1.5 with References，把图像、语音参考和原生 1080p 视频生成合并",
+          "brief": "xAI 于 2026 年 8 月 1 日发布 Imagine Video 1.5 with References。官方称，这是其当前最强视频模型，新增文本、图像和语音参考能力，并支持原生 1080p 生成，可在 Grok.com、应用端与 Imagine API 使用。",
+          "commentary": "视频生成正在从“给一句提示词出片”走向“可控生产链路”。一旦参考图、参考声线和 API 工作流稳定下来，商业价值就更接近广告、电商、品牌物料和内容工作室的批量生产，而不是一次性演示。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "xAI",
+              "source_url": "https://x.ai/news/grok-imagine-video-1-5-references",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 6,
+          "headline": "欧盟宣布 8 月 2 日起开始执行 AI Act 新一阶段规则，通用模型与透明度要求进入实操期",
+          "brief": "欧盟委员会于 2026 年 7 月 31 日发布新闻稿，称自 2026 年 8 月 2 日起，欧盟 AI Office 将与成员国主管机构一起开始执行 AI Act 新一阶段要求，包括对通用 AI 模型与新的透明度义务的执法。委员会同日还上线了针对 GPAI 模型违规的下游提供方投诉渠道。",
+          "commentary": "监管从“框架讨论”进入“执行环节”后，AI 厂商的商业变量会更直接地体现在合规成本、地区可售范围、模型披露义务和事故响应能力上。对平台公司来说，欧洲不再只是政策观察区，而是会实质影响销售与产品路线的经营变量。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "European Commission",
+              "source_url": "https://digital-strategy.ec.europa.eu/en/news/commission-starts-enforcing-ai-act-rules-and-new-transparency-requirements-2-august",
+              "source_type": "official"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "European Commission",
+              "source_url": "https://digital-strategy.ec.europa.eu/en/miscellaneous/complaints-channel-downstream-providers-using-general-purpose-ai-models",
+              "source_type": "official"
+            }
+          ]
+        }
+      ],
+      "business_analysis": {
+        "main_theme": "今天最值得跟踪的主线，是 AI 行业开始把“模型能力竞争”进一步转成“系统交付竞争”：成本效率、默认入口、权限控制、内容溯源和区域合规，正在一起决定谁能把 AI 做成长期生意。",
+        "market_structure": "市场结构继续向少数全栈平台集中，但集中方式已经不只是模型参数领先。OpenAI、Google、xAI 这类玩家都在同时争取算力效率、产品入口和开发者/企业工作流位置；欧盟的执法推进则进一步抬高了进入高级别市场所需的合规与治理门槛。未来中小厂商更可能在垂直场景、工具层或服务层切入，而不是正面复制全栈平台。",
+        "commercialization": "商业化上，今天新闻里最关键的变量有四个。第一，单位智能成本能否持续下降，这决定订阅价格和 API 毛利空间。第二，AI 是否进入默认工作入口，例如桌面语音、浏览器代理或企业日常流程。第三，模型调用能否沉淀为批量内容生产或长期工作流，而不是一次性试玩。第四，合规能力是否足够强，能否缩短企业采购周期并维持欧洲等高监管市场的可销售性。",
+        "strategic_implications": "战略上，OpenAI 与 Google 都在争夺“默认执行层”，xAI 在补足多模态创作链路，Anthropic 这次事故则提醒所有厂商，agent 一旦连接真实系统，安全边界会直接影响产品上线节奏和客户信任。欧盟执法进入新阶段后，能够把治理、披露、投诉处理和事故响应制度化的公司，会在大型客户与跨区经营上拥有更强议价权。",
+        "long_term_investment_view": "长期看，不能把 AI 需求增长直接等同于所有相关公司都是好投资。好公司要同时具备技术、产品化和治理执行力；好生意要能形成可续费收入、较高转换成本和可守住的毛利结构；好价格则必须把算力投入、降价压力、监管成本和内容责任风险算进去。今天这些新闻更支持“平台分化会加速”，而不是“行业整体都会同样受益”。",
+        "tracking_metrics": [
+          "OpenAI、Google 等平台后续是否继续披露活跃用户、企业客户数或企业席位扩张，验证默认入口是否真正带来留存和收入放大",
+          "Anthropic 及同类 agent 产品后续是否公开更多关于沙箱、权限、审计和事故响应的改进节奏，验证 agent 商业化是否会被安全约束拖慢",
+          "xAI 视频生成产品是否出现更明确的 API 定价、企业案例或创作者工作流集成，验证多模态视频是否从演示转向稳定付费需求",
+          "欧盟 AI Act 执法落地后，头部模型公司是否开始发布更多合规文档、投诉处理结果或区域限制变化，验证监管成本如何影响竞争格局"
+        ],
+        "thinking_questions": [
+          "当单位智能成本继续下降时，真正能保住利润率的，会是模型本身，还是控制入口与工作流的平台层？",
+          "未来企业采购 AI 时，安全隔离、溯源和地区合规会不会比模型榜单排名更先进入招标清单？",
+          "多模态视频与 agent 都在走向真实生产流程后，哪些场景最先形成高频、标准化、可持续付费的需求？"
+        ]
+      }
+    },
     {
       "report_date": "2026-07-30",
       "issue_number": "022",
