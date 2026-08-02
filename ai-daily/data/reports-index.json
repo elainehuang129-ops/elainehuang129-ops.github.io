@@ -1,7 +1,142 @@
 {
-  "generated_at": "2026-08-01T13:14:29+08:00",
-  "report_count": 4,
+  "generated_at": "2026-08-02T07:04:13+08:00",
+  "report_count": 5,
   "reports": [
+    {
+      "report_date": "2026-08-02",
+      "issue_number": "027",
+      "title": "2026年8月2日 AI 日报",
+      "summary": "按主要源站在北美时区的发布日期核对，过去 24 小时最值得看的 AI 主线不是“谁又多发了一个模型”，而是头部玩家继续把竞争推进到更难复制的层面：OpenAI 一边用 DevDay 锁定开发者生态，一边用数学与理论计算机科学成果强化前沿研究品牌；Google 和 xAI 分别把桌面代理与可控视频工作流推近真实使用；Anthropic 的评测事故和欧盟 AI Act 执法则提醒市场，安全隔离、权限治理与合规执行已经和模型能力一样重要。",
+      "tags": [
+        "OpenAI",
+        "Google",
+        "Anthropic",
+        "xAI",
+        "EU AI Act",
+        "开发者生态",
+        "研究",
+        "多模态"
+      ],
+      "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "amber",
+        "slate"
+      ],
+      "mood": "克制",
+      "items": [
+        {
+          "sort_order": 1,
+          "headline": "OpenAI 宣布 DevDay 2026 将于 9 月 29 日在旧金山举行，开发者生态进入新一轮预热",
+          "brief": "OpenAI 于 2026 年 8 月 2 日发布 DevDay 2026 预告，确认年度开发者大会将在 9 月 29 日于旧金山举办，并开放通知报名入口。官方将其定义为“年度最大活动”，意味着今年下半年的平台能力、API 与开发者产品路线将围绕该节点集中释放。",
+          "commentary": "DevDay 的意义不只是办会，而是平台公司重新集中开发者注意力与生态资源的窗口。谁能在大会前后形成新的工具链、分发渠道和默认工作流，谁就更有机会把模型能力沉淀为长期的开发者锁定和经常性收入。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/devday-2026/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 2,
+          "headline": "OpenAI 发布《Ten advances in mathematics and theoretical computer science》，继续用前沿研究拉高品牌上限",
+          "brief": "OpenAI 于 2026 年 8 月 1 日发布《Ten advances in mathematics and theoretical computer science》，汇总模型在数学与理论计算机科学上的十项进展，并同步提供论文与 reasoning walkthroughs。该发布延续了 OpenAI 近期将科学研究、推理能力和模型可信度绑定呈现的做法。",
+          "commentary": "对头部实验室来说，基础研究成果不一定立刻变现，但会强化“最强能力供给者”的市场认知。这既影响高端人才吸引，也影响企业客户、科研机构与开发者在复杂任务上愿不愿意为更高能力和更深支持付费。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/ten-advances-in-mathematics/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 3,
+          "headline": "Anthropic 披露三起网络安全评测事故，agent 商业化的隔离与权限问题被再次放大",
+          "brief": "Anthropic 于 2026 年 7 月 31 日发布说明，称其在回顾 141,006 次网络安全评测运行后识别出 3 起事件：Claude 因第三方评测环境配置失误接触到真实互联网，并对 3 家组织的真实系统产生未授权访问。Anthropic 表示根因在于环境隔离和权限配置失误，而非有意对外部署攻击。",
+          "commentary": "这类事件直接影响 agent 的商用节奏。企业真正担心的不是模型会不会回答，而是当模型接入浏览器、终端和 SaaS 后，权限边界、审计链和沙箱机制是否足够可靠；这些能力会逐步变成企业采购和监管审查中的硬门槛。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Anthropic",
+              "source_url": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 4,
+          "headline": "Google 发布 7 月 Gemini Drop，把桌面语音入口、Gemini Spark 与轻量模型继续推向高频场景",
+          "brief": "Google 于 2026 年 7 月 31 日发布 7 月 Gemini Drop，宣布 Gemini 已可在 macOS 任意活动窗口中通过语音创建、编辑和总结内容，Gemini Spark 向更多全球地区开放，并同步带来 Gemini 3.6 Flash 与 3.5 Flash-Lite。",
+          "commentary": "Google 的推进方式很明确：不是孤立发布一个模型，而是把桌面入口、代理能力和轻量模型组合成更高频的使用面。商业价值在于提高调用频次、降低切换成本，并把 Gemini 更深地嵌入个人生产力和开发者日常流程。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Google",
+              "source_url": "https://blog.google/products-and-platforms/products/gemini/gemini-drop-july-2026/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 5,
+          "headline": "xAI 推出 Imagine Video 1.5 with References，把参考图、参考声线与原生 1080p 视频生成并到一条工作流",
+          "brief": "xAI 于 2026 年 8 月 1 日发布 Imagine Video 1.5 with References。官方称，这是其当前最强视频模型，新增文本、图像与语音参考能力，并支持原生 1080p 生成，可在 Grok.com、应用端与 Imagine API 使用。",
+          "commentary": "视频生成的商业价值正从“演示级炫技”转向“可控生产链路”。当参考图、声线、分辨率和 API 工作流逐步稳定，产品更接近广告、电商、品牌物料和内容工作室的批量交付，而不是一次性试玩。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "xAI",
+              "source_url": "https://x.ai/news/grok-imagine-video-1-5-references",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 6,
+          "headline": "欧盟 AI Act 自 8 月 2 日进入新一阶段执法，通用模型与透明度义务正式进入实操期",
+          "brief": "欧盟委员会于 2026 年 7 月 31 日发布新闻稿，称自 2026 年 8 月 2 日起，欧盟 AI Office 将与成员国主管机构一起开始执行 AI Act 新一阶段规则，包括面向通用 AI 模型和新的透明度要求的执法；同日还上线了针对 GPAI 模型违规的下游提供方投诉渠道。",
+          "commentary": "监管开始执行后，合规不再是“以后再补”的文档工作，而会直接影响销售节奏、地区可用性、合同签署速度和事故响应成本。对平台公司来说，欧洲市场正在把治理、披露和投诉处理能力转化为真正的经营变量。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "European Commission",
+              "source_url": "https://digital-strategy.ec.europa.eu/en/news/commission-starts-enforcing-ai-act-rules-and-new-transparency-requirements-2-august",
+              "source_type": "official"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "European Commission",
+              "source_url": "https://digital-strategy.ec.europa.eu/en/miscellaneous/complaints-channel-downstream-providers-using-general-purpose-ai-models",
+              "source_type": "official"
+            }
+          ]
+        }
+      ],
+      "business_analysis": {
+        "main_theme": "今天真正变化的产业变量，是 AI 竞争继续从“模型更强”转向“系统更可交付”：开发者生态、研究品牌、桌面入口、视频工作流、安全隔离和监管执行同时开始影响收入质量与竞争壁垒。",
+        "market_structure": "市场结构上，头部平台继续向少数全栈玩家集中，但分化维度已经不只是模型榜单。OpenAI 在同时经营开发者大会、研究品牌和平台路线；Google 抢桌面与轻量模型入口；xAI 补多模态内容生产链；Anthropic 与欧盟事件则说明，没有安全治理与合规执行能力的玩家会更难进入高价值企业场景。",
+        "commercialization": "商业化路径上，今天的新闻对应三类收入模型：一是 DevDay 这类生态事件背后所服务的 API、工具链和开发者席位收入；二是 Gemini 与 xAI 这类提高使用频次的产品化入口，带动订阅和用量计费；三是合规与安全能力对大型企业合同转化率的影响。真正重要的是，这些收入能否形成高续费、高迁移成本和可维持的毛利结构。",
+        "strategic_implications": "战略上，平台公司正在争夺“默认工作流位置”，但这场竞争越来越依赖非模型因素。研究公信力决定高端任务心智，开发者大会决定生态预期，权限治理决定企业上线边界，合规执行决定区域扩张天花板。谁能把这些环节一起做成制度化能力，谁的优势就更难被价格战复制。",
+        "long_term_investment_view": "长期看，不能把 AI 行业热度直接等同于股权回报。好公司要有技术、产品化和治理执行力；好生意要有可续费收入、较高转换成本和可守住的利润结构；好价格还要把算力投入、监管成本、内容责任和潜在降价压力算进去。今天的新闻更支持“平台分化会继续扩大”，而不是“所有 AI 资产都会同步受益”。",
+        "tracking_metrics": [
+          "OpenAI DevDay 2026 后是否发布新的 API、代理工具或开发者定价变化，验证开发者生态是否继续扩张",
+          "Google Gemini 在桌面与代理场景中的后续地区开放、企业席位和高频使用披露，验证入口是否真的带来留存",
+          "xAI 是否进一步披露视频 API 定价、企业客户案例或创作者工作流集成，验证视频生成是否形成稳定付费需求",
+          "Anthropic 及同类 agent 平台后续是否公开更多沙箱、权限和审计改进节奏，验证安全治理是否成为企业采购门槛",
+          "欧盟 AI Act 执法落地后，头部模型公司是否发布更多合规文档、投诉处理结果或区域限制调整，验证监管对销售与产品路线的真实影响"
+        ],
+        "thinking_questions": [
+          "未来企业采购 AI 时，开发者生态、研究品牌和安全治理，哪一个最容易转化成真正的转换成本？",
+          "当模型能力逐步接近时，默认入口和合规能力会不会比参数领先更能决定长期利润率？",
+          "多模态视频与桌面代理都在走向真实工作流后，哪些场景最先形成高频、标准化、可持续付费的需求？"
+        ]
+      }
+    },
     {
       "report_date": "2026-08-01",
       "issue_number": "026",
