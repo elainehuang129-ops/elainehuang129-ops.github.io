@@ -1,7 +1,198 @@
 {
-  "generated_at": "2026-08-21T23:46:08Z",
-  "report_count": 7,
+  "generated_at": "2026-08-23T23:14:46Z",
+  "report_count": 8,
   "reports": [
+    {
+      "report_date": "2026-08-23",
+      "issue_number": "031",
+      "title": "2026年8月23日 AI 日报",
+      "summary": "按 2026-08-23 运行日回看过去 24 小时，最值得关注的不是单一模型发布，而是 AI 产业链的三条主线同时强化：监管从“是否管”转向“如何管”，算力与系统成本继续上行，头部公司在定价、资本开支和渠道分发上加速分化。OpenAI 对加州安全法案的态度转向、Nvidia 向模型与系统两端同时延伸、以及阿里加码全栈 AI 投资，说明行业竞争正从参数规模转向治理能力、资本效率和商业化落地。",
+      "tags": [
+        "OpenAI",
+        "Anthropic",
+        "Nvidia",
+        "Alibaba",
+        "AI治理",
+        "基础设施",
+        "定价",
+        "中国AI"
+      ],
+      "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "amber",
+        "slate"
+      ],
+      "mood": "审慎",
+      "items": [
+        {
+          "sort_order": 1,
+          "headline": "OpenAI 转向支持更强版本的加州 AI 安全法案",
+          "brief": "TechCrunch 8 月 22 日报道，OpenAI 现在支持一版更强的加州 AI 安全法案 SB 53，并希望在此前基础上加入更多安全护栏。报道同时提到，OpenAI 今年 6 月发布的《Frontier Safety Blueprint》已与该法案多项要求接近。",
+          "commentary": "这件事的意义不在于一家公司“表态变了”，而在于头部实验室正从抵触州级立法转向参与规则细化。对行业来说，这会把第三方评估、事件披露、举报保护等治理要求逐步推成默认成本项，尤其会影响高风险模型的训练、上线和审计流程。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "TechCrunch",
+              "source_url": "https://techcrunch.com/2026/08/22/openai-now-backs-stronger-california-ai-safety-bill/",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "California Legislature",
+              "source_url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53",
+              "source_type": "official"
+            },
+            {
+              "sort_order": 3,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/frontier-safety-blueprint/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 2,
+          "headline": "OpenAI 在模型评测安全事件后扩大高能力模型测试监控",
+          "brief": "英国《金融时报》8 月 23 日报道，在 Hugging Face 模型评测安全事件之后，OpenAI 计划扩大对高能力模型测试的监控，并将更多算力投入网络安全相关防护。OpenAI 在 8 月 18 日的官方通报中确认，该事件暴露了高阶网络能力模型带来的新型风险。",
+          "commentary": "这说明模型安全已经从“合规配套”变成核心研发成本。未来一段时间，前沿模型厂商的真实竞争不只体现在能力提升，也体现在能否把红队、日志、权限隔离、自动监控和事件响应嵌入训练与评测流程。安全开销会直接影响利润率和发布时间表。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Financial Times",
+              "source_url": "https://www.ft.com/content/40d93d65-6f66-470e-a6fe-95f38eea0e93",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/hugging-face-model-evaluation-security-incident/",
+              "source_type": "company"
+            },
+            {
+              "sort_order": 3,
+              "source_name": "OpenAI",
+              "source_url": "https://openai.com/index/pacing-model-development-cyber-capabilities/",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 3,
+          "headline": "新评估指出多数前沿实验室仍未公开“失控模型”遏制方案",
+          "brief": "TechCrunch 8 月 22 日援引 Guidelight 发布的《Control: Frontier AI labs are failing to prepare for model autonomy risks》称，多数前沿 AI 实验室仍未公开说明一旦模型试图规避人类控制，将如何执行遏制、隔离和紧急响应。",
+          "commentary": "这把 AI 安全讨论从抽象伦理推到了工程可执行层面。若实验室连应急预案、权限切断、审计留痕和对外通报机制都说不清，监管机构和企业客户就更可能要求可验证的控制标准。长期看，这会抬高行业准入门槛，也会压缩“先上线再补治理”的空间。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "TechCrunch",
+              "source_url": "https://techcrunch.com/2026/08/22/frontier-ai-labs-still-wont-say-how-theyd-contain-a-rogue-model/",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "Guidelight",
+              "source_url": "https://www.guidelight.ai/standards/control-frontier-ai-labs-are-failing-to-prepare-for-model-autonomy-risks",
+              "source_type": "official"
+            }
+          ]
+        },
+        {
+          "sort_order": 4,
+          "headline": "Nvidia 以 60 亿美元授权交易押注 Poolside，推进开放权重替代路线",
+          "brief": "《华尔街日报》8 月 23 日报道，Nvidia 与 AI 编程初创公司 Poolside 达成约 60 亿美元的授权交易，以支持其建设可挑战 OpenAI 和 Anthropic 的开放权重模型。Newcomer 同日补充称，Nvidia 还对 Poolside 进行了股权投资。",
+          "commentary": "这反映出 Nvidia 不再满足于只卖算力，而是在向模型 IP 和生态控制权上游延伸。对产业链而言，芯片公司下场扶持开放权重阵营，既是对封闭 API 模式的制衡，也是对企业客户“想要可部署、可控、可私有化”需求的回应。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "The Wall Street Journal",
+              "source_url": "https://www.wsj.com/tech/ai/poolside-got-6-billion-from-nvidia-to-challenge-openai-and-anthropic-8e44e86c",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "Newcomer",
+              "source_url": "https://www.newcomer.co/p/nvidias-1-billion-poolside-bet",
+              "source_type": "media"
+            }
+          ]
+        },
+        {
+          "sort_order": 5,
+          "headline": "Nvidia 旗舰 AI 系统 2027 年报价据报将上调约 17%",
+          "brief": "The Information 8 月 22 日报道，Nvidia 部分旗舰 AI 系统面向 2027 年出货的报价将提高约 17%。《海峡时报》援引 Bloomberg 同日报道称，价格上调与 HBM 等关键部件成本攀升有关。",
+          "commentary": "这直接影响 AI 行业的成本曲线。若算力系统继续涨价，训练和推理的资本开支压力会进一步向下游传导，企业会更关注单位成本、模型路由、蒸馏、缓存和推理优化，而不是盲目追逐最强模型。高成本也会进一步强化头部公司与中小玩家的融资鸿沟。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "The Information",
+              "source_url": "https://www.theinformation.com/articles/nvidias-flagship-ai-systems-are-about-to-get-17-more-expensive",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "The Straits Times",
+              "source_url": "https://www.straitstimes.com/business/companies-markets/nvidia-said-to-raise-prices-on-its-prized-ai-server-chip-systems-by-17",
+              "source_type": "media"
+            }
+          ]
+        },
+        {
+          "sort_order": 6,
+          "headline": "阿里巴巴计划配售约 102 亿美元新股，明确把资金投向全栈 AI",
+          "brief": "《金融时报》8 月 23 日报道，阿里巴巴计划通过发行可交换债和配售新股筹资约 102 亿美元，以加大 AI 投入。阿里巴巴集团同日公告称，配售约 800 亿港元新股所得将 100% 用于提升 full-stack AI capabilities，包括 AI 基础设施与技术。",
+          "commentary": "这说明中国头部平台的 AI 竞争进入“资本开支战”。当模型、云、芯片适配和应用分发需要同步推进时，真正有优势的不只是模型性能，而是能否把资本投入转化为云收入、企业客户留存和生态锁定。对投资者而言，产业前景并不自动等于股东回报，关键要看投入回收周期和利润率承压程度。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Financial Times",
+              "source_url": "https://www.ft.com/content/c7af6dde-5c8f-4516-9d8c-84c8ef36f7f1",
+              "source_type": "media"
+            },
+            {
+              "sort_order": 2,
+              "source_name": "Alibaba Group",
+              "source_url": "https://www.alibabagroup.com/document-2043924524042502144",
+              "source_type": "company"
+            }
+          ]
+        },
+        {
+          "sort_order": 7,
+          "headline": "Anthropic 旗舰模型 Fable 5 叫好不叫座，便宜工具开始赢得更多预算",
+          "brief": "《金融时报》8 月 23 日报道，Anthropic 旗舰模型 Fable 5 在企业端的支出占比在 7 万家公司样本中停在约 11%，同时其年度化收入在 7 月已达 65 亿美元。报道指出，更便宜的旧模型、开放权重模型以及 OpenAI 新一轮降价，正在分流企业预算。",
+          "commentary": "这条新闻很适合作为“好模型不等于好生意”的提醒。企业采购最终看的是可用性、稳定性、总拥有成本和迁移摩擦，而不是单次 benchmark 排名。若高端模型不能持续证明 ROI，行业就会把更多预算推向分层路由、混合模型栈和价格更友好的供应商。",
+          "sources": [
+            {
+              "sort_order": 1,
+              "source_name": "Financial Times",
+              "source_url": "https://www.ft.com/content/6cb3a42c-8c1f-4c58-974e-1c24734e674b",
+              "source_type": "media"
+            }
+          ]
+        }
+      ],
+      "business_analysis": {
+        "main_theme": "今天最值得重视的主线，不是又有哪个模型跑分更高，而是 AI 产业正同时进入“治理加码、成本抬升、商业分层”三个阶段。OpenAI 对 SB 53 的态度转向、OpenAI 因安全事件扩大监控、以及 Guidelight 对失控风险准备不足的批评，说明治理已从公关议题变成生产约束；Nvidia 与 Poolside、Nvidia 提价、阿里大额募资，则说明资本与基础设施仍在加速集中；Anthropic 的定价与采用压力则提醒市场，能力领先并不自动换来预算领先。",
+        "market_structure": "市场结构上，AI 正在进一步向少数能同时承担训练成本、治理成本和渠道成本的平台集中。Nvidia 仍掌握算力定价权，但已经开始向模型与生态上游延伸；OpenAI 在监管与安全流程上率先承担“制度化成本”；阿里则试图用资本开支换取中国市场的模型、云和应用协同。中短期看，行业不像纯软件那样轻资产扩张，而更像“重资产基础设施+高毛利软件”混合体。",
+        "commercialization": "商业化上，今天新闻里最关键的变量有三个：第一，安全与合规是否会显著抬高单位模型成本；第二，算力和系统报价上涨后，客户是否会更快转向蒸馏、路由和开放权重；第三，头部平台的大额资本开支最终能否转化为可持续收入，而不是只换来更高的折旧与费用。Anthropic 的案例尤其说明，企业预算不是按技术理想分配，而是按总拥有成本、稳定性和工作流嵌入深度分配。",
+        "strategic_implications": "战略上，未来一段时间更可能胜出的公司，不一定是单点模型最强者，而是能同时管理安全、成本、渠道和生态的复合型平台。芯片公司如果继续向模型投资延伸，会重塑上下游议价关系；模型公司如果在监管框架下率先建立可信流程，可能更容易拿下大型企业和政府客户；中国平台如果把资本投入顺利转成云与应用收入，竞争会从模型能力战演变为平台效率战。",
+        "long_term_investment_view": "长线看，应该把“好公司”“好生意”“好价格”拆开判断。AI 赛道里的头部公司未必都能成为好生意，因为它们可能需要长期承受高资本开支、快速价格下探和监管成本；而即便是好生意，也未必在当前就是好价格。今天这些新闻更支持一个判断：优质 AI 收入会向少数兼具算力、分发、治理和客户关系的玩家集中，但对应的回报兑现路径仍需要用利润率、留存和资本开支纪律来验证。",
+        "tracking_metrics": [
+          "SB 53 及相关州级 AI 立法后续条款是否纳入第三方评估、事件披露与举报保护，以及 OpenAI 等公司是否公开配套流程。",
+          "Nvidia 高端 AI 系统实际成交价、HBM 供给变化和大型客户资本开支指引，验证算力涨价能否持续。",
+          "阿里 AI 相关资本开支投入后，云收入增速、AI 付费客户数或管理层披露的商业化里程碑是否同步改善。",
+          "Anthropic 旗舰模型在企业采购中的预算占比是否回升，或是否继续被更便宜模型与开放权重方案分流。",
+          "头部模型公司未来季度的毛利率、推理成本优化幅度，以及安全合规投入占比是否上升。"
+        ],
+        "thinking_questions": [
+          "当安全与合规要求越来越具体后，真正能持续受益的会是最强模型公司，还是最擅长把治理流程产品化的平台？",
+          "如果算力系统继续涨价，企业会更愿意为最强模型买单，还是更快拥抱分层路由、蒸馏与开放权重？",
+          "中国平台的大额 AI 资本开支，最终能否转换成高粘性云收入和生态锁定，而不是利润率长期受压？"
+        ]
+      }
+    },
     {
       "report_date": "2026-08-22",
       "issue_number": "030",
@@ -18,6 +209,12 @@
         "企业落地"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "emerald",
+        "slate"
+      ],
       "mood": "审慎",
       "items": [
         {
@@ -170,6 +367,12 @@
         "产业应用"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "cobalt",
+        "slate"
+      ],
       "mood": "克制",
       "items": [
         {
@@ -321,6 +524,12 @@
         "开发者工具"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "cobalt",
+        "slate"
+      ],
       "mood": "克制",
       "items": [
         {
@@ -467,6 +676,12 @@
         "多模态"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "amber",
+        "slate"
+      ],
       "mood": "克制",
       "items": [
         {
@@ -596,6 +811,12 @@
         "合规"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "cobalt",
+        "slate"
+      ],
       "mood": "审慎",
       "items": [
         {
@@ -724,6 +945,12 @@
         "语音"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "amber",
+        "slate"
+      ],
       "mood": "克制",
       "items": [],
       "business_analysis": {
@@ -752,6 +979,12 @@
         "基础设施"
       ],
       "status": "published",
+      "cover_variant": "hero",
+      "cover_palette": [
+        "paper",
+        "amber",
+        "ink"
+      ],
       "mood": "克制",
       "items": [],
       "business_analysis": {
